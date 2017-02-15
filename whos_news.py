@@ -9,6 +9,7 @@ app = Flask(__name__, static_folder='static')
 @app.route("/")
 def home():
     salute = "hej there"
+    val = ""
     return render_template("base.html", salute=salute)
 
 
