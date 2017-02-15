@@ -21,7 +21,7 @@ def home():
     articleLink = "http://politiken.dk/indland/politik/art5833361/Borgmestre-er-åbne-for-at-rykke-politikere-til-provinsen"
     getLinkData = requests.get(articleLink)
     soup = BeautifulSoup(getLinkData.content, "lxml")
-    # print("original encoding", soup.original_encoding, soup )
+    print("original encoding", soup.original_encoding)
     tagThing = ".article__title"
     tagContent = soup.select(tagThing)
     # alltext =
