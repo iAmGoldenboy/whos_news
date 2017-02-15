@@ -14,12 +14,12 @@ def home():
     articleLink = "http://politiken.dk/indland/politik/art5833361/Borgmestre-er-åbne-for-at-rykke-politikere-til-provinsen"
     getLinkData = requests.get(articleLink)
     soup = BeautifulSoup(getLinkData.content, "lxml")
-    print("original encoding", soup.original_encoding, soup )
+    # print("original encoding", soup.original_encoding, soup )
     tagThing = ".article__title"
     tagContent = soup.select(tagThing)
     # alltext =
     val = "dfdf"
-    return render_template("base.html", salute=salute, articleLink=tagContent, soup=soup)
+    return render_template("base.html", salute=salute, articleLink="enconding : {} / Link: {} / Tags: {}".format(soup.original_encoding, articleLink, tagContent), soup=soup)
 
 
 if __name__ == "__main__":
