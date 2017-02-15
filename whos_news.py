@@ -4,6 +4,10 @@ __datum__ = '15/02/17'
 
 from flask import Flask, render_template
 import requests
+from testcron import runHej
+import schedule
+import time
+from threading import Thread
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
 from nltk.stem import SnowballStemmer, snowball
@@ -14,6 +18,7 @@ import nltk
 from nltk.collocations import *
 
 app = Flask(__name__, static_folder='static')
+start_time = time.time()
 
 @app.route("/")
 def home():
@@ -33,6 +38,15 @@ def home():
     return render_template("base.html", salute=salute, articleLink="enconding : {} / Link: {} / Tags: {}".format(org_enc, articleLink, tagContent), soup=soup)
 
 
-if __name__ == "__main__":
+def mySchedule():
+    schedule.every(10).seconds.do(runHej)
 
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+if __name__ == "__main__":
+    t = Thread(target=mySchedule)
+    t.start()
+    print("Start time: " + str(start_time))
     app.run()

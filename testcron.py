@@ -4,3 +4,7 @@ __datum__ = '15/02/17'
 
 
 print("you are piethon")
+
+def runHej():
+    print("hej pejthorn")
+    return "hopsa hopsasa"
