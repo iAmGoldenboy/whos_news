@@ -5,6 +5,13 @@ __datum__ = '15/02/17'
 from flask import Flask, render_template
 import requests
 from bs4 import BeautifulSoup
+from nltk.tokenize import sent_tokenize
+from nltk.stem import SnowballStemmer, snowball
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
+from nltk import tree, trigrams, word_tokenize, pos_tag, ne_chunk, ne_chunk_sents
+import nltk
+from nltk.collocations import *
 
 app = Flask(__name__, static_folder='static')
 
