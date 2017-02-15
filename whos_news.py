@@ -15,9 +15,11 @@ def home():
     getLinkData = requests.get(articleLink)
     soup = BeautifulSoup(getLinkData.content, "lxml")
     print("original encoding", soup.original_encoding, soup )
+    tagThing = ".article__title"
+    tagContent = soup.select(tagThing)
     # alltext =
     val = "dfdf"
-    return render_template("base.html", salute=salute, articleLink=articleLink, soup=soup)
+    return render_template("base.html", salute=salute, articleLink=tagContent, soup=soup)
 
 
 if __name__ == "__main__":
