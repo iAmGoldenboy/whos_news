@@ -17,16 +17,20 @@ app = Flask(__name__, static_folder='static')
 
 @app.route("/")
 def home():
+    tagContent = []
     salute = "hej there"
+    org_enc = "-"
+    soup = "*"
     articleLink = "http://politiken.dk/indland/politik/art5833361/Borgmestre-er-åbne-for-at-rykke-politikere-til-provinsen"
-    getLinkData = requests.get(articleLink)
-    soup = BeautifulSoup(getLinkData.content, "lxml")
-    print("original encoding", soup.original_encoding)
-    tagThing = ".article__title"
-    tagContent = soup.select(tagThing)
+    # getLinkData = requests.get(articleLink)
+    # soup = BeautifulSoup(getLinkData.content, "lxml")
+    # org_enc = soup.original_encoding
+    # print("original encoding", org_enc)
+    # tagThing = ".article__title"
+    # tagContent = soup.select(tagThing)
     # alltext =
     val = "dfdf"
-    return render_template("base.html", salute=salute, articleLink="enconding : {} / Link: {} / Tags: {}".format(soup.original_encoding, articleLink, tagContent), soup=soup)
+    return render_template("base.html", salute=salute, articleLink="enconding : {} / Link: {} / Tags: {}".format(org_enc, articleLink, tagContent), soup=soup)
 
 
 if __name__ == "__main__":
