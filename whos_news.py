@@ -25,7 +25,7 @@ def home():
     # getLinkData = requests.get(articleLink)
     # soup = BeautifulSoup(getLinkData.content, "lxml")
     # org_enc = soup.original_encoding
-    # print("original encoding", org_enc)
+    print("original encoding", org_enc)
     # tagThing = ".article__title"
     # tagContent = soup.select(tagThing)
     # alltext =
