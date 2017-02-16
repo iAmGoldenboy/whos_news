@@ -1,0 +1,200 @@
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('k.dk-u', 'http://www.kristeligt-dagblad.dk/rss/udland', 'Udland', 'Kristeligt Dagblad', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('b-Kultur' ,'http://www.b.dk/feeds/rss/kultur' , 'Kultur' , 'Berlingske Tidende', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('b-Indland','http://www.b.dk/feeds/rss/Nationalt' , 'Indland' , 'Berlingske Tidende', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('b-Udland', 'http://www.b.dk/feeds/rss/Globalt' , 'Udland' , 'Berlingske Tidende', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('p-Indland', 'http://politiken.dk/rss/indland.rss' , 'Indland' , 'Politiken', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('p-Udland', 'http://politiken.dk/rss/udland.rss' , 'Udland' , 'Politiken', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('p-Kultur', 'http://politiken.dk/rss/kultur.rss' , 'Kultur' , 'Politiken', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('p-oekonomi', 'http://politiken.dk/rss/oekonomi.rss' , 'Økonomi' , 'Politiken', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('j-Indland', 'http://jyllands-posten.dk/indland/?service=rssfeed' , 'Indland' , 'Jyllands-Posten', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('j-Udland', 'http://jyllands-posten.dk/international/?service=rssfeed', 'Udland' , 'Jyllands-Posten', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('j-Kultur', 'http://jyllands-posten.dk/kultur/?service=rssfeed' , 'Kultur' , 'Jyllands-Posten', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('j-politik', 'http://jyllands-posten.dk/politik/?service=rssfeed' , 'Politik' , 'Jyllands-Posten', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('eb-Indland', 'http://ekstrabladet.dk/rss2/?mode=normal&submode=nyheder' , 'Indland' , 'Ekstra Bladet', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('eb-Kultur', 'http://ekstrabladet.dk/rss2/?mode=normal&submode=flash' , 'Kultur' , 'Ekstra Bladet', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('bt-Indland', 'http://www.bt.dk/nyheder/seneste/rss' , 'Indland' , 'BT', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('bt-Kultur', 'http://www.bt.dk/underholdning/seneste/rss' , 'Kultur' , 'BT', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('k.dk-i', 'http://www.kristeligt-dagblad.dk/rss/danmark', 'Indland', 'Kristeligt Dagblad', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('k.dk-k', 'http://www.kristeligt-dagblad.dk/rss/kultur', 'Kultur', 'Kristeligt Dagblad', 'Dagblad');
+INSERT IGNORE INTO rss_feeds (name, rssLink, sektion, avis, medietype)
+VALUES ('information-i', 'https://www.information.dk/feed', 'Indland', 'Information', 'Dagblad');
+
+
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Politiken', '.article__title', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Politiken', '.article__summary', 'underrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Politiken', '.media__image', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Politiken', '.body__h3', 'mellemrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Politiken', '.quote__p', 'quoteTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Politiken', '.body__p', 'brodtextTag' );
+
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Jyllands-Posten', 'h1', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Jyllands-Posten', '.artDescription p', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Jyllands-Posten', '.artImgCaption', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Jyllands-Posten', '.articleText h3', 'mellemrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Jyllands-Posten', '#articleText p', 'brodtextTag' );
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Berlingske Tidende', '.article-header__title', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Berlingske Tidende', '.article-header__summary', 'underrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Berlingske Tidende', '.article-content__image-caption', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Berlingske Tidende', '.article-body p', 'brodtextTag' );
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('BT', '.article-title', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('BT', '.image-caption', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('BT', '.article-content p', 'brodtextTag' );
+
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Ekstra Bladet', '.rubrik', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Ekstra Bladet', '.underrubrik', 'underrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Ekstra Bladet', '.mediacontrols .text', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Ekstra Bladet', '.bodytext p', 'brodtextTag' );
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Information', '.title-not-premium', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Information', '.field-name-field-underrubrik', 'underrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Information', '.field-name-field-description p', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Information', '.field-name-body h4', 'mellemrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+VALUES ('Information', '.field-name-body p', 'brodtextTag' );
+
+INSERT INTO html_tags (avis, tagData, tagArea)
+    VALUES ('Kristeligt Dagblad', '.node-title', 'overskriftTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+    VALUES ('Kristeligt Dagblad', '.field-name-field-underrubrik', 'underrubrikTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+    VALUES ('Kristeligt Dagblad', '.slide-comments .caption', 'billedtekstTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+    VALUES ('Kristeligt Dagblad', '.content .field p', 'brodtextTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+    VALUES ('Kristeligt Dagblad', '.post-author-name a', 'bylineTag' );
+INSERT INTO html_tags (avis, tagData, tagArea)
+    VALUES ('Kristeligt Dagblad', '.content p', 'introTag' );
+
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://pol.dk/161', 'Indland', 'Politiken');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://pol.dk/137', 'Sport', 'Politiken');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://pol.dk/135', 'Kultur', 'Politiken');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://pol.dk/134', 'Udland', 'Politiken');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://jp.dk/14423', 'Politik', 'Jyllands-Posten');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://jp.dk/1254', 'Sport', 'Jyllands-Posten');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://jp.dk/17625', 'Kultur', 'Jyllands-Posten');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://jp.dk/12826', 'Indland', 'Jyllands-Posten');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://bt.dk/15561', 'Politik', 'BT');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://bt.dk/1337', 'Sport', 'BT');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://bt.dk/145635', 'Indland', 'BT');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://bt.dk/134', 'Kultur', 'BT');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://eb.dk/923', 'Udland', 'Ekstra Bladet');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://eb.dk/724', 'Indland', 'Ekstra Bladet');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://eb.dk/725', 'Sport', 'Ekstra Bladet');
+INSERT INTO articleLinks (articleLink, sektion, avis) VALUES ('http://eb.dk/726', 'Kultur', 'Ekstra Bladet');
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (1, 'Facebook Total', 25);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (1, 'Stumbles', 12);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (1, 'Facebook Likes', 4);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (1, 'Facebook Shares', 2);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (2, 'Facebook Comments', 6);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (2, 'LinkedIn', 1);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (2, 'Pins', 98);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (3, 'GooglePlus', 5);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (4, 'Tweets', 65);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (1, 'Facebook Total', 25);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (1, 'Stumbles', 12);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (16, 'Facebook Likes', 4);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (14, 'Facebook Shares', 2);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (12, 'Facebook Comments', 6);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (12, 'LinkedIn', 1);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (12, 'Pins', 8);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (13, 'GooglePlus', 15);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (14, 'Tweets', 5);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (8, 'Facebook Total', 15);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (9, 'Stumbles', 2);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (5, 'Facebook Likes', 664);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (6, 'Facebook Shares', 32);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (7, 'Facebook Comments', 16);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (6, 'LinkedIn', 15);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (4, 'Pins', 8);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (9, 'GooglePlus', 35);
+INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount) VALUES (4, 'Tweets', 15);
+INSERT INTO namedEntities (ne) VALUES ('Anders And');
+INSERT INTO namedEntities (ne) VALUES ('Anders');
+INSERT INTO namedEntities (ne) VALUES ('peter');
+INSERT INTO namedEntities (ne) VALUES ('torben');
+INSERT INTO namedEntities (ne) VALUES ('Donald Trump');
+INSERT INTO namedEntities (ne) VALUES ('ghdfgasq');
+INSERT INTO namedEntities (ne) VALUES ('aetdfasg');
+INSERT INTO namedEntities (ne) VALUES ('jtuyheryv');
+INSERT INTO namedEntities (ne) VALUES ('werg werg ewrg ');
+INSERT INTO namedEntities (ne) VALUES ('wre uyretytwe');
+INSERT INTO namedEntities (ne) VALUES ('7 5e6hte');
+INSERT INTO namedEntities (ne) VALUES ('q45 wetdfjg');
+INSERT INTO namedEntities (ne) VALUES ('45 y');
+INSERT INTO namedEntities (ne) VALUES (' e4urty');
+INSERT INTO namedEntities (ne) VALUES ('rtyi rtuy');
+INSERT INTO namedEntities (ne) VALUES ('wert wey werty wer');
+INSERT INTO namedAliases (alias_ne, original_ne_id) VALUES ('Donald Duck',1);
+INSERT INTO namedAliases (alias_ne, original_ne_id) VALUES ('Donald',1);
+INSERT INTO namedAliases (alias_ne, original_ne_id) VALUES ('Donald',4);
+INSERT INTO namedAliases (alias_ne, original_ne_id) VALUES ('Ducky',1);
+INSERT INTO namedAliases (alias_ne, original_ne_id) VALUES ('ræven',3);
+INSERT INTO namedAliases (alias_ne, original_ne_id) VALUES ('Ræven',3);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (1, 1, 43, 2, 41);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (1, 2, 33, 9, 11);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (1, 3, 23, 6, 21);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (2, 1, 43, 2, 41);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (2, 2, 33, 9, 11);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (6, 3, 28, 67, 21);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (3, 1, 4, 2, 4);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (4, 2, 13, 9, 1);
+INSERT INTO namedEntity2Articles (ne2art_ne_id, ne2art_art_id, neOccuranceCount, neOccuranceHead, neOccuranceTail) VALUES (5, 3, 3, 6, 2);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (1,2,3);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (2,1,3);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (1,3,3);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (1,4,3);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (4,2,3);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (5,2,1);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (6,2,1);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (1,6,1);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (1,2,2);
+INSERT INTO foaf (foaf_ne_id, foaf_knows_id, foaf_art_id) VALUES (1,2,6);

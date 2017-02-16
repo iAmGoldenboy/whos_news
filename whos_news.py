@@ -2,6 +2,7 @@ __author__ = 'Miklas Njor - iAmGoldenboy - http://miklasnjor.com'
 __projectname__ = 'whos_news / whos_news.py'
 __datum__ = '15/02/17'
 
+from dbhelper import DBHelper
 from flask import Flask, render_template
 import requests
 # from testcron import runHej
@@ -19,6 +20,7 @@ from nltk.collocations import *
 
 app = Flask(__name__, static_folder='static')
 start_time = time.time()
+DB = DBHelper()
 
 @app.route("/")
 def home():
@@ -37,6 +39,15 @@ def home():
     val = "dfdf"
     return render_template("base.html", salute=salute, articleLink="enconding : {} / Link: {} / Tags: {}".format(org_enc, articleLink, tagContent), soup=soup)
 
+
+@app.route("/!hottubby")
+def hottubby():
+    """ Overview admin kind page.
+    :return:
+    """
+    numart = "Number of articless: {} /     Seen {} / Not Seen {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen())
+
+    return render_template("admin/hottubby.html", numart=numart)
 
 # def mySchedule():
 #     schedule.every(10).seconds.do(runHej)

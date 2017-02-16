@@ -1,0 +1,11 @@
+
+
+/* select namedEntities.ne, namedAliases.alias from namedEntities inner join namedAliases on namedEntities.ne=namedAliases.ne; */
+
+/* select foaf.ne, foaf.knows, foaf_strong.ne, foaf_strong.knows, foaf_strong.articleLink from foaf inner join foaf_strong where foaf_strong.ne=foaf.knows and foaf_strong.knows=foaf.ne ORDER BY foaf_strong.articleLink; */
+
+select foaf.ne, foaf.knows, foaf_strong.ne, foaf_strong.knows, foaf_strong.articleLink from foaf inner join foaf_strong where foaf_strong.ne=foaf.knows and foaf_strong.knows=foaf.ne ORDER BY foaf_strong.articleLink;
+
+select COUNT(DISTINCT knows), ne from foaf group by ne;
+select COUNT(DISTINCT knows), ne, COUNT(DISTINCT articleLink) from foaf_strong group by ne order by COUNT(DISTINCT articleLink) DESC;
+select COUNT(DISTINCT knows), ne, COUNT(DISTINCT articleLink) from foaf_strong group by ne order by COUNT(DISTINCT articleLink) DESC, COUNT(DISTINCT knows) DESC;
