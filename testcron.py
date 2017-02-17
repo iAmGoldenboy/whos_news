@@ -161,8 +161,6 @@ def extractArticleData():
                                         tagOutput = extractTagContent(tagContent, htmltag[0])
 
                                     # OK, now we have a list of sentences to go through. Let's do it!
-                                    if htmltag[0] == "overskriftTag":
-                                        print("Tag output ", tagOutput)
 
                                     for lines in tagOutput:
                                         try:
