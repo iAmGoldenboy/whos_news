@@ -227,7 +227,7 @@ def nltkGit(sample):
 def removeStopwords(stringToREMOVEstopwordsFrom):
 
     if isinstance(stringToREMOVEstopwordsFrom, list):
-        joinedList = ''
+        joinedList = ' '
         joinedList += " ".join(stringToREMOVEstopwordsFrom)
         stringToREMOVEstopwordsFrom = joinedList
 

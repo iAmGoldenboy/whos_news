@@ -45,7 +45,7 @@ def hottubby():
     """ Overview admin kind page.
     :return:
     """
-    numart = "Number of articless: {} /     Seen {} / Not Seen {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen())
+    numart = "Number of articles in the que: {} /     Seen {} / Not Seen {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen())
 
     return render_template("admin/hottubby.html", numart=numart)
 

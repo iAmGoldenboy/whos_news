@@ -181,7 +181,7 @@ def extractArticleData():
                                             print("Couldn't tokenize NE data due to : ", e)
 
                                 except Exception as e:
-                                    print("Error with tag {} content due to : {} ".format(htmltag, e) )
+                                    print("Error with tag {} : tag item {} | content due to : {} ".format(htmltag[0], tagItem, e) )
 
                             else:
                                 # no tag item for this html tag, so lets move on without crying.
@@ -211,18 +211,18 @@ def extractArticleData():
                             try:
                                 headCount = keepHead[neID]
                             except Exception as e:
-                                # pass
-                                print("Head not found - scary", e, keepHead)
+                                pass
+                                # print("Head not found - scary", e, keepHead)
 
                             try:
                                 tailCount = keepTail[neID]
                             except Exception as e:
-                                # pass
-                                print("Tail not found - not scary, but it sucks", e, keepTail)
+                                pass
+                                # print("Tail not found - not scary, but it sucks", e, keepTail)
 
                             # Insert named entity into database
                             neValues = [str(neID)]
-                            neoutput = DB.insertValuesReturnID('namedEntities', ['ne'], neValues, 'ne', neID, 'ne_id', mode="single", returnID=True, printQuery=True)
+                            neoutput = DB.insertValuesReturnID('namedEntities', ['ne'], neValues, 'ne', neID, 'ne_id', mode="single", returnID=True, printQuery=False)
 
                             ne2artFields = ['ne2art_ne_id', 'ne2art_art_id', 'neOccuranceCount', 'neOccuranceHead', 'neOccuranceTail', 'neOccurranceShape']
                             nerartValues = [neoutput, article_id, neData.get("sum"), headCount, tailCount, str(neData.get("shape"))]
@@ -243,7 +243,7 @@ def extractArticleData():
                         for neID, neData in collectNEdict.items():
                             for foaf in neData.get("foaflist"):
                                 foafValues = [neData.get("ne_id"), collectNEdict[foaf].get("ne_id"), neData.get("foaf_art_id")]
-                                foaf_id = DB.insertValuesReturnID('foaf', foafFields, foafValues, foafLookfor, [neData.get("ne_id"), neData.get("foaf_art_id")], returnID=True, mode="foaf", printQuery=True)
+                                foaf_id = DB.insertValuesReturnID('foaf', foafFields, foafValues, foafLookfor, [neData.get("ne_id"), neData.get("foaf_art_id")], returnID=True, mode="foaf", printQuery=False)
                                 print("NE_ID: {} NE-DATA: {}, FOAF: {}, FOAF_ID: {}".format( neID, neData, foaf, foaf_id) )
 
                         # Collect Social Media data
@@ -290,12 +290,12 @@ def extractArticleData():
 
 def deleteOldArticles():
     print("Deleting articles from que")
-    DB.deleteFromArticleQue(5,"hour")
+    DB.deleteFromArticleQue(23,"hour")
 
 def mySchedule():
-    schedule.every(3).minutes.do(insertArticleLinksFromFeedsIntoArticleQue)
-    schedule.every(5).minutes.do(extractArticleData)
-    schedule.every(5).hours.do(deleteOldArticles)
+    schedule.every(1).minutes.do(insertArticleLinksFromFeedsIntoArticleQue)
+    schedule.every(2).minutes.do(extractArticleData)
+    schedule.every(23).hours.do(deleteOldArticles)
 
     while True:
         schedule.run_pending()

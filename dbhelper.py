@@ -92,7 +92,7 @@ class DBHelper:
                 cursor.execute(query)
             return cursor.fetchall()
         except Exception as e:
-            print("getHTMLtagItem tag area: ", e)
+            print("getHTMLtagItem tag area error: ", e)
         finally:
             connection.close()
 
@@ -118,7 +118,7 @@ class DBHelper:
         connection = self.connect()
         try:
             query = """SELECT COUNT(*) FROM articleQue; """
-            print("countArticlesQue : ", query)
+            # print("countArticlesQue : ", query)
             with connection.cursor() as cursor:
                 cursor.execute(query)
             return cursor.fetchall()
@@ -131,7 +131,7 @@ class DBHelper:
         connection = self.connect()
         try:
             query = """SELECT COUNT(*) FROM articleQue WHERE seen=1; """
-            print("countArticlesQueSeen : ", query)
+            # print("countArticlesQueSeen : ", query)
             with connection.cursor() as cursor:
                 cursor.execute(query)
             return cursor.fetchall()
@@ -144,7 +144,7 @@ class DBHelper:
         connection = self.connect()
         try:
             query = """SELECT COUNT(*) FROM articleQue WHERE seen=0; """
-            print("countArticlesQueNotSeen : ", query)
+            # print("countArticlesQueNotSeen : ", query)
             with connection.cursor() as cursor:
                 cursor.execute(query)
             return cursor.fetchall()
@@ -206,7 +206,7 @@ class DBHelper:
             WHERE NOT EXISTS (
                 SELECT socialMedia_art_id, socialMediaID, socialMediaCount FROM articleSocialMediaCount WHERE socialMedia_art_id = {} AND socialMediaID = '{}' AND socialMediaCount = {}
             ) LIMIT 1;""".format(article_id, enumValue, count, article_id, enumValue, count)
-            print("insertSocialMedia -> ", query)
+            # print("insertSocialMedia -> ", query)
             with connection.cursor() as cursor:
                 cursor.execute(query)
             connection.commit()

@@ -71,9 +71,9 @@ def extractHeaderText(item):
 
     try:
         if item.get_text().strip()[len(item.get_text().strip())-1] not in string.punctuation:
-            headerText = "{}. ".format(scrubString(item.get_text().strip()))
+            headerText = "{} . ".format(scrubString(item.get_text().strip()))
         else:
-            headerText = "{} ".format(scrubString(item.get_text().strip()) )
+            headerText = "{}  ".format(scrubString(item.get_text().strip()) )
     except Exception as e:
         print("extractHeaderText error due to :", e)
 
@@ -100,7 +100,7 @@ def extractImageText(imgtext, htmltag):
             imagetext = imagetext.split("Foto:")[0]
 
             if htmltag == 'billedtekstTag' and "REUTERS" in imagetext:
-                imagetext = imagetext.split("REUTERS")[0]
+                imagetext = "{} ".format(imagetext.split("REUTERS")[0])
 
         except Exception as e:
             print("No 'Foto:' data due to :", e)
@@ -108,7 +108,7 @@ def extractImageText(imgtext, htmltag):
     elif "Fotos:" in imagetext:
 
         try:
-            imagetext = imagetext.split("Fotos:")[0]
+            imagetext = "{} ".format(imagetext.split("Fotos:")[0])
 
         except Exception as e:
             print("No 'Fotos:' data due to :", e)
@@ -116,7 +116,7 @@ def extractImageText(imgtext, htmltag):
     elif "PHOTO:" in imagetext:
 
         try:
-            imagetext = imagetext.split("PHOTO:")[0]
+            imagetext = "{} ".format(imagetext.split("PHOTO:")[0])
 
         except Exception as e:
             print("No 'PHOTO:' data due to :", e)
@@ -124,7 +124,7 @@ def extractImageText(imgtext, htmltag):
     elif "PHOTOS:" in imagetext:
 
         try:
-            imagetext = imagetext.split("PHOTOS:")[0]
+            imagetext = "{} ".format(imagetext.split("PHOTOS:")[0])
 
         except Exception as e:
             print("No 'PHOTOS:' data due to :", e)
