@@ -46,6 +46,9 @@ def extractArticles(feedsDict):
 
 
 def getArticleLinksFromFeeds():
+    """
+    :return:
+    """
     # def getArticleLinksFromFeeds():
     # get list of feeds
     # get articleLinks from feeds
@@ -95,9 +98,13 @@ def getArticleLinksFromFeeds():
 #     print(myart)
 
 def insertArticleLinksFromFeedsIntoArticleQue():
+    """ Collects all the articles from all the feeds and adds them to the article que if they are not there.
+    :return: VOID
+    """
+
 
     articleDataList = getArticleLinksFromFeeds()
-    print("Length of articles: ", len(articleDataList))
+    print("Current number of article-links in all feeds: ", len(articleDataList))
 
     for articleData in articleDataList:
         try:
@@ -118,7 +125,7 @@ def insertArticleLinksFromFeedsIntoArticleQue():
 
 def extractArticleData():
     articleLinks = DB.getArticleQue()
-    print("Number of articles: {} /     Seen {} / Not Seen {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen()) )
+    print("Number of articles in Que: {} - of which we have seen: {} - and need to go through: {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen()) )
     if len(articleLinks) > 0:
         for articleLink in articleLinks:
             # print("     ---> ", articleLink)
@@ -128,7 +135,7 @@ def extractArticleData():
                 # save the article link in the database and get the article_id for future use.
                 article_id = DB.insertValuesReturnID('articleLinks', ['articleLink', 'sektion', 'avis'], [str(articleLink), str(sektion), str(avis)], 'articleLink', articleLink, 'article_id', returnID=True, printQuery=False)
 
-                print("the article link is {} and the id is {}".format(articleLink, article_id))
+                # print("the article link is {} and the id is {}".format(articleLink, article_id))
                 getLinkData = requests.get(articleLink)
                 if getLinkData.status_code == 200:
                     soup = BeautifulSoup(getLinkData.content, "lxml", from_encoding="utf-8")
@@ -136,12 +143,13 @@ def extractArticleData():
                     # print("soup de soup ---> ", soup)
 
                     try:
-                        tagItem = None
+                        # tagItem = None
                         NEbag, NEhead, NEtail = [], [], []
 
                         for htmltag in html_tags:
                             # print("HTMLTAGS", htmltag, htmltag[0])
                             tagItem = DB.getHTMLtagItem(avis, htmltag[0]) # Get the htmltags for this newspaper
+
 
                             if tagItem:
                                 tagOutput = []
@@ -153,7 +161,8 @@ def extractArticleData():
                                         tagOutput = extractTagContent(tagContent, htmltag[0])
 
                                     # OK, now we have a list of sentences to go through. Let's do it!
-                                    # print("Tag output ", tagOutput)
+                                    if htmltag[0] == "overskriftTag":
+                                        print("Tag output ", tagOutput)
 
                                     for lines in tagOutput:
                                         try:
@@ -168,20 +177,24 @@ def extractArticleData():
                                                 # ... add all to one big bag
                                                 [NEbag.append(neToken) for neToken in sentenceNEs]
 
-                                                # Lets also split between bodycopy and headercopy (inkl. captions)
-                                                # When dealing with bodycopy, inline headlines and quotes add them to the NEtail list.
-                                                if htmltag == "brodtextTag" or htmltag == "mellemrubrikTag" or htmltag == "quoteTag":
-                                                    [NEtail.append(neToken) for neToken in sentenceNEs]
+                                                try:
 
-                                                # ... else they must be Header Copy and will be added to NEhead list
-                                                else:
-                                                    [NEhead.append(neToken) for neToken in sentenceNEs]
+                                                    # Lets also split between bodycopy and headercopy (inkl. captions)
+                                                    # When dealing with bodycopy, inline headlines and quotes add them to the NEtail list.
+                                                    if htmltag == "brodtextTag" or htmltag == "mellemrubrikTag" or htmltag == "quoteTag":
+                                                        [NEtail.append(neToken) for neToken in sentenceNEs]
+
+                                                    # ... else they must be Header Copy and will be added to NEhead list
+                                                    else:
+                                                        [NEhead.append(neToken) for neToken in sentenceNEs]
+                                                except Exception as e:
+                                                    print("Couldn't add -> {} <- to NE tail / head due to ".format(sentenceNEs, e))
 
                                         except Exception as e:
                                             print("Couldn't tokenize NE data due to : ", e)
 
                                 except Exception as e:
-                                    print("Error with tag {} : tag item {} | content due to : {} ".format(htmltag[0], tagItem, e) )
+                                    print("Error with tag -> {} <- : tag item -> {} <- | content due to : {} ".format(htmltag[0], tagItem, e) )
 
                             else:
                                 # no tag item for this html tag, so lets move on without crying.
@@ -190,7 +203,7 @@ def extractArticleData():
                         # OK, good! Now we have three list with NE's. Lets start adding them to the database.
 
                         # Lets first see what's in them
-                        print("Shebang", NEbag)
+                        # print("Shebang", NEbag)
 
                         keepAll = signal(NEbag)
                         keepHead = keepThoseAboveQuartile(NEhead)
@@ -289,8 +302,10 @@ def extractArticleData():
 
 
 def deleteOldArticles():
-    print("Deleting articles from que")
-    DB.deleteFromArticleQue(23,"hour")
+    timeNum = 23
+    timeType = "hour"
+    print("Deleting articles from que: {} / {}".format(timeNum, timeType))
+    DB.deleteFromArticleQue(timeNum, timeType)
 
 def mySchedule():
     schedule.every(1).minutes.do(insertArticleLinksFromFeedsIntoArticleQue)

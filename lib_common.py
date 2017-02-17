@@ -29,34 +29,35 @@ def extractTagContent(tagContent, htmltag):
     tagOutput = []
 
     for item in tagContent:
-        try:
-            if htmltag == 'billedtekstTag':
-                imgtext = extractImageText(item, htmltag)
+        if item is not None:
+            try:
+                if htmltag == 'billedtekstTag':
+                    imgtext = extractImageText(item, htmltag)
 
-                if imgtext not in tagOutput:
-                    tagOutput.append(imgtext.replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", "").replace("  ", ""))
+                    if imgtext not in tagOutput:
+                        tagOutput.append(imgtext.replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", "").replace("  ", ""))
 
-            elif htmltag == "overskriftTag":
-                headerText = extractHeaderText(item.replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", "").replace("  ", ""))
+                elif htmltag == "overskriftTag":
+                    headerText = extractHeaderText(item)
 
-                if headerText not in tagOutput:
-                    tagOutput.append(headerText)
+                    if headerText not in tagOutput:
+                        tagOutput.append(headerText)
 
-            elif htmltag == "brodtextTag":
-                broedText = item.get_text().strip().replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", " ").replace("  ", "")
+                elif htmltag == "brodtextTag":
+                    broedText = item.get_text().strip().replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", " ").replace("  ", "")
 
-                if broedText not in tagOutput:
-                    if "Læs også" not in broedText  or "/ritzau/" not in broedText or "Artiklen fortsætter under billedet" not in broedText or "Se også:" not in broedText:
-                        tagOutput.append(broedText)
+                    if broedText not in tagOutput:
+                        if "Læs også" not in broedText  or "/ritzau/" not in broedText or "Artiklen fortsætter under billedet" not in broedText or "Se også:" not in broedText:
+                            tagOutput.append(broedText)
 
-            else:
-                otherText = item.get_text().strip().replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", " ").replace("  ", "")
+                else:
+                    otherText = item.get_text().strip().replace(" og ", ", ").replace(" fra ", ", ").replace(" på ", ", ").replace(" til ", ", ").replace("\n", " ").replace("  ", "")
 
-                if otherText not in tagOutput:
-                    tagOutput.append(otherText)
+                    if otherText not in tagOutput:
+                        tagOutput.append(otherText)
 
-        except Exception as e:
-            print("Error with tag ", item, "due to ", e)
+            except Exception as e:
+                print("Error with extractTagContent ", item, "with tag ->", htmltag, "<- due to ", e)
 
     return tagOutput
 
@@ -92,42 +93,56 @@ def extractImageText(imgtext, htmltag):
     try:
         imagetext = imgtext.get_text().strip()
     except Exception as e:
-        print("Couldn't get img text -> {} <- due to : {}".format(imgtext, e))
+        print("IN extractImageText - Couldn't get img text -> {} <- due to : {}".format(imgtext, e))
 
-    if "Foto:" in imagetext:
+    if len(imagetext) > 0:
 
-        try:
-            imagetext = imagetext.split("Foto:")[0]
+        if "ARKIVFOTO," in imagetext:
 
-            if htmltag == 'billedtekstTag' and "REUTERS" in imagetext:
-                imagetext = "{} ".format(imagetext.split("REUTERS")[0])
+            try:
+                imagetext = "{} ".format(imagetext.split("ARKIVFOTO:")[0])
+            except Exception as e:
+                print("No 'ARKIVFOTO:' data due to :", e)
 
-        except Exception as e:
-            print("No 'Foto:' data due to :", e)
+        elif "Arkivfoto:" in imagetext:
 
-    elif "Fotos:" in imagetext:
+            try:
+                imagetext = "{} ".format(imagetext.split("Arkivfoto:")[0])
+            except Exception as e:
+                print("No 'Arkivfoto:' data due to :", e)
 
-        try:
-            imagetext = "{} ".format(imagetext.split("Fotos:")[0])
+        elif "Foto:" in imagetext:
 
-        except Exception as e:
-            print("No 'Fotos:' data due to :", e)
+            try:
+                imagetext = imagetext.split("Foto:")[0]
 
-    elif "PHOTO:" in imagetext:
+                if htmltag == 'billedtekstTag' and "REUTERS" in imagetext:
+                    imagetext = "{} ".format(imagetext.split("REUTERS")[0])
 
-        try:
-            imagetext = "{} ".format(imagetext.split("PHOTO:")[0])
+            except Exception as e:
+                print("No 'Foto:' data due to :", e)
 
-        except Exception as e:
-            print("No 'PHOTO:' data due to :", e)
+        elif "Fotos:" in imagetext:
 
-    elif "PHOTOS:" in imagetext:
+            try:
+                imagetext = "{} ".format(imagetext.split("Fotos:")[0])
+            except Exception as e:
+                print("No 'Fotos:' data due to :", e)
 
-        try:
-            imagetext = "{} ".format(imagetext.split("PHOTOS:")[0])
 
-        except Exception as e:
-            print("No 'PHOTOS:' data due to :", e)
+        elif "PHOTO:" in imagetext:
+
+            try:
+                imagetext = "{} ".format(imagetext.split("PHOTO:")[0])
+            except Exception as e:
+                print("No 'PHOTO:' data due to :", e)
+
+        elif "PHOTOS:" in imagetext:
+
+            try:
+                imagetext = "{} ".format(imagetext.split("PHOTOS:")[0])
+            except Exception as e:
+                print("No 'PHOTOS:' data due to :", e)
 
     return imagetext
 

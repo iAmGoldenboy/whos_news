@@ -428,7 +428,11 @@ def keepThoseAboveQuartile(bagname, outputQuartiles=False):
 
 
 def signal(neList):
-
+    """ Note that this only looks at the NE list, and not the entire article, and as such does not currently represent
+    the entirely actual truth about the signals form
+    :param neList: the tokenized list to search for signals in
+    :return: a dict with the forms of the NE  (ascending, descending, solid, diamond, hourglass)
+    """
     seen = []
     shapeList = []
     outputDict = {}
