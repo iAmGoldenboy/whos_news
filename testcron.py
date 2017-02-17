@@ -153,7 +153,7 @@ def extractArticleData():
                                         tagOutput = extractTagContent(tagContent, htmltag[0])
 
                                     # OK, now we have a list of sentences to go through. Let's do it!
-                                    print("Tag output ", tagOutput)
+                                    # print("Tag output ", tagOutput)
 
                                     for lines in tagOutput:
                                         try:
@@ -244,7 +244,7 @@ def extractArticleData():
                             for foaf in neData.get("foaflist"):
                                 foafValues = [neData.get("ne_id"), collectNEdict[foaf].get("ne_id"), neData.get("foaf_art_id")]
                                 foaf_id = DB.insertValuesReturnID('foaf', foafFields, foafValues, foafLookfor, [neData.get("ne_id"), neData.get("foaf_art_id")], returnID=True, mode="foaf", printQuery=False)
-                                print("NE_ID: {} NE-DATA: {}, FOAF: {}, FOAF_ID: {}".format( neID, neData, foaf, foaf_id) )
+                                # print("NE_ID: {} NE-DATA: {}, FOAF: {}, FOAF_ID: {}".format( neID, neData, foaf, foaf_id) )
 
                         # Collect Social Media data
                         smDict = get_social_metrics(articleLink, pause=1)
