@@ -4,28 +4,37 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" -->
+
+    <!-- Optional theme -->
+    <!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" -->
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/normalize.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap-min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylebootstrap-theme-min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/lib/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/lib/bootstrap/css/bootstrap-theme.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/lib/bootstrap-table/bootstrap-table.css') }}">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-      <!--script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script -->
-
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="{{ url_for('static', filename='style/js/bootstrap.js') }}" charset="utf-8"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/sticky-header/bootstrap-table-sticky-header.css" />
+
+    <!-- Bootstrap -->
+    <!-- link rel="stylesheet" href="{{ url_for('static', filename='style/lib/bootstrap/css/bootstrap.min.css') }}"-->
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
+
     {% block head %}
 
-    <title> {% if salute %}
-                {{ salute }} -
-            {% else %}
-                See
-            {% endif %} Who's News</title>
+    <title> {% if salute %}  {{ salute }} - {% elif namedEntity %} Results for: {{ namedEntity }} in the Media. {% endif %} Whos News</title>
 
     {% endblock %}
 
@@ -43,42 +52,70 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="/">Home</a></li>
+                        <li><a href="{{ url_for('namedEntities') }}">Navne</a></li>
+                        <li><a href="{{ url_for('mediaNames') }}">Medier</a></li>
+                        <li><a href="{{ url_for('omProjektet') }}"><span class="glyphicon glyphicon-bullhorn" aria-label="About the Project" aria-hidden="true"></span> Om Projektet</a></li>
+                        <li><a href="/"><span class="glyphicon glyphicon-wrench" aria-label="Documentation" aria-hidden="true"></span> Documentation</a></li>
+                        <li><a href="/"><span class="glyphicon glyphicon-envelope" aria-label="Contact" aria-hidden="true"></span> Contact</a></li>
+                        <li><a href="/"><span class="glyphicon glyphicon-piggy-bank" aria-label="Donate" aria-hidden="true"></span> Donate</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
         <div class="container theme-showcase" role="main">
-                <div class="jumbotron">
-                    <h1>Who's news</h1>
-                    <p></p>
-                </div>
+
+            <div class="jumbotron">
+                {% if namedEntity %}<h1> Whos news </h1> <p> scorecard for  {{ namedEntity }}</p> <br>
+                    <p>Share/tweet scoreboard </p>
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Tweet</a>
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Facebook</a>
+
+                {% else %} <h1>Whos news</h1>  {% endif %}
+                <p>...</p>
+
+            </div>
+            <ol class="breadcrumb">
+  <li><a href="#">Home</a></li>
+  <li><a href="#">Library</a></li>
+  <li class="active">Data</li>
+</ol>
+
+            <div class="page-header">
+
+                <h1>{% if header %}  {{ header | safe }}  {% endif %} {% if subText %} <small> {{ subText | safe }} </small>  {% endif %}</h1>
+
+                <p> {% if subHeader %}  {{ subHeader | safe }}  {% endif %}  </p>
+            </div>
 
 
-
-                {% if salute %}
-                    <div class="page-header">
-                        <h2>{{ salute|safe}}</h2>
-                        <p>{{ articleLink }}</p>
-                        <hr>
-                        <p>{{ soup }}</p>
-
-                    </div>
-                {% else %}
-                    <div class="page-header">
-                        <h2>Overview</h2>
-                    </div>
-                {% endif %}
-
-
-
-
-                {% block content %}{% endblock %}
+                {% block content %}
+                {% endblock %}
 
 
         </div>
 
 
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{{ url_for('static', filename='style/lib/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='style/lib/bootstrap-table/bootstrap-table.js') }}"></script>
 
+        <script src="{{ url_for('static', filename='style/lib/bootstrap-table/bootstrap-table.js') }}"></script>
+
+        <!-- put your locale files after bootstrap-table.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table-locale-all.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/mobile/bootstrap-table-mobile.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/multiple-search/bootstrap-table-multiple-search.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/natural-sorting/bootstrap-table-natural-sorting.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/multi-column-toggle/bootstrap-table-multi-toggle.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/natural-sorting/bootstrap-table-natural-sorting.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/resizable/bootstrap-table-resizable.js"></script>
+
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     </body>
 
 

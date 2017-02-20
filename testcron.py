@@ -4,6 +4,7 @@ __datum__ = '15/02/17'
 
 import schedule
 import time
+import datetime
 from dbhelper import DBHelper
 from lib_common import getKey2nd, extractHeaderText, extractImageText, get_social_metrics, extrapolateSocialMetrics, extractTagContent
 from lib_nlp import removeStopwordsFromString, extractNE, signal, keepThoseAboveQuartile
@@ -13,8 +14,7 @@ import random
 from bs4 import BeautifulSoup
 
 DB = DBHelper()
-rssFeeds = DB.get_all_feeds()
-html_tags = DB.getHTMLtags()
+
 # print("you are piethon")
 
 
@@ -56,6 +56,9 @@ def getArticleLinksFromFeeds():
 
     olderArticles = []
     newerArticles = []
+
+    rssFeeds = DB.get_all_feeds()
+
 
     sektion = ""
     avis = ""
@@ -110,11 +113,17 @@ def insertArticleLinksFromFeedsIntoArticleQue():
         try:
             if articleData[2] == "Berlingske Tidende" or articleData[2] == "BT":
 
-                end = articleLink[len(articleLink)-2:]
+                end = articleData[0][len(articleData[0])-2:]
+
                 berlList = ["-0", "-1", "-2", "-3", "-4", "-5", "-6"]
 
                 if end in berlList:
-                    articleLink = articleData[0][:len(articleData)-2]
+                    articleLink = articleData[0][:len(articleData[0])-2]
+                else:
+                    articleLink = articleData[0]
+            else:
+                # print("going in else with -> ", articleData)
+                articleLink = articleData[0]
 
         except Exception as e:
             articleLink = articleData[0]
@@ -124,8 +133,11 @@ def insertArticleLinksFromFeedsIntoArticleQue():
 
 
 def extractArticleData():
+
+    html_tags = DB.getHTMLtags()
+
     articleLinks = DB.getArticleQue()
-    print("Number of articles in Que: {} - of which we have seen: {} - and need to go through: {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen()) )
+    print("Number of articles in Que: {} - of which we have seen: {} - and need to go through: {} - Date: {}".format( DB.countArticlesQue(), DB.countArticlesQueSeen(), DB.countArticlesQueNotSeen(), datetime.datetime.now()) )
     if len(articleLinks) > 0:
         for articleLink in articleLinks:
             # print("     ---> ", articleLink)
@@ -308,7 +320,7 @@ def deleteOldArticles():
 def mySchedule():
     schedule.every(1).minutes.do(insertArticleLinksFromFeedsIntoArticleQue)
     schedule.every(2).minutes.do(extractArticleData)
-    schedule.every(23).hours.do(deleteOldArticles)
+    schedule.every(1).hours.do(deleteOldArticles)
 
     while True:
         schedule.run_pending()

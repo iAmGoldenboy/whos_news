@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+        <div class="row">
+            <div class="container">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Avis</th>
+                            <th>Sektion</th>
+                            <th>Seneste time</th>
+                            <th>Seneste 3 timer</th>
+                            <th>Seneste Døgn</th>
+                            <th>Seneste Uge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in recentArticles %}
+                            {% if not loop.first and recentArticles[loop.index0-1][1].get("avis") == item[1].get("avis") %}
+                                <tr>
+
+                                    <td class="recentArticles_mediaData-medium" id="recentArticles_mediaData-medium_{{ item[1].get('avis') }}">
+                                        <a title="Link til Medie: {{ item[1].get('avis') }}" href="{{ url_for('mediaNames', mediaName=item[1].get('avis') ) }}">
+                                            {{ item[1].get("avis") }}
+                                        </a>
+                                    </td>
+                                    <td class="recentArticles_mediaData-section" id="recentArticles_mediaData-medium_{{ item[1].get('avis') }}_item[1].get('sektion')">
+                                        <a title="Link til Medie og Sektion: {{ item[1].get('avis') }} - {{ item[1].get('sektion') }}" href="{{ url_for('mediaNames', mediaName=item[1].get('avis'), section=item[1].get('sektion') ) }}">
+                                            {{ item[1].get("sektion") }}
+                                        </a>
+                                    </td>
+                                    <td class="recentArticles_mediaData-hour" id="recentArticles_mediaData-hour_{{ item[1].get('avis') }}">{{ item[1].get("last") }}</td>
+                                    <td class="recentArticles_mediaData-3hours" id="recentArticles_mediaData-3hours_{{ item[1].get('avis') }}">{{ item[1].get("three") }}</td>
+                                    <td class="recentArticles_mediaData-24hours" id="recentArticles_mediaData-24hours_{{ item[1].get('avis') }}">{{ item[1].get("twenty") }}</td>
+                                    <td class="recentArticles_mediaData-week" id="recentArticles_mediaData-week_{{ item[1].get('avis') }}">{{ item[1].get("week") }}</td>
+
+                                </tr>
+
+                            {% else %} 
+                                <tr class="recentArticles_mediaName">
+                                    <td>
+                                        <a title="Link til Medie: {{ item[1].get('avis') }}" href="{{ url_for('mediaNames', mediaName=item[1].get('avis') ) }}">
+                                            {{ item[1].get("avis") }}
+                                        </a>
+                                    </td>
+                                    <td>Sektion</td><td>Seneste time</td><td>Seneste 3 timer</td><td>Seneste Døgn</td><td>Seneste Uge</td>
+                                </tr>
+                                <tr class="recentArticles_mediaData">
+
+                                    <td class="recentArticles_mediaData-medium" id="recentArticles_mediaData-medium_{{ item[1].get('avis') }}">
+                                        <a title="Link til Medie: {{ item[1].get('avis') }}" href="{{ url_for('mediaNames', mediaName=item[1].get('avis') ) }}">
+                                            {{ item[1].get("avis") }}
+                                        </a>
+                                    </td>
+                                    <td class="recentArticles_mediaData-section" id="recentArticles_mediaData-medium_{{ item[1].get('avis') }}_item[1].get('sektion')">
+                                        <a title="Link til Medie og Sektion:  {{ item[1].get('avis') }} - {{ item[1].get('sektion') }}" href="{{ url_for('mediaNames', mediaName=item[1].get('avis'), section=item[1].get('sektion') ) }}">
+                                            {{ item[1].get("sektion") }}
+                                        </a>
+                                    </td>
+                                    <td class="recentArticles_mediaData-hour" id="recentArticles_mediaData-hour_{{ item[1].get('avis') }}">{{ item[1].get("last") }}</td>
+                                    <td class="recentArticles_mediaData-3hours" id="recentArticles_mediaData-3hours_{{ item[1].get('avis') }}">{{ item[1].get("three") }}</td>
+                                    <td class="recentArticles_mediaData-24hours" id="recentArticles_mediaData-24hours_{{ item[1].get('avis') }}">{{ item[1].get("twenty") }}</td>
+                                    <td class="recentArticles_mediaData-week" id="recentArticles_mediaData-week_{{ item[1].get('avis') }}">{{ item[1].get("week") }}</td>
+
+                                </tr>
+                            {% endif %}
+
+
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {{ mergeDict}}
+            </div>
+        </div>
+
+
+
+
+{% endblock %}

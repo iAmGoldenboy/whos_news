@@ -23,3 +23,194 @@ p.userTip:hover {
 p.userTip:hover, .userTip:hover strong, .userTip:hover > a {
     color: #000;
 }
+
+.recentArticles_mediaName {
+    background: #EEE;
+    color: #999;
+    border-top: 3px solid #337ab7;
+}
+
+.recentArticles_mediaName  a {
+    font-weight: bold;
+    /* color: #444; */
+}
+
+.recentArticles_mediaData-medium  a {
+    color: #AAA;
+}
+
+.row_odd {
+    background: #e2e2e2;
+}
+
+.row_even {
+    background: #f1f1f1;
+}
+
+
+
+/* NAMED ENTITIES */
+
+thead#table-namedEntity tr th {
+    vertical-align:bottom;
+}
+
+
+
+/* row r + h date */
+
+.row-h-date {
+    min-width:110px;
+}
+
+.row-r-date {
+    font-size: .7em;
+}
+
+
+
+/* row metadata for articles */
+
+
+.format-type {
+    color: #000;
+
+    text-align: center;
+}
+
+.row-h-shape, .row-h-ToC, .row-h-HeC, .row-h-TaC {
+
+}
+
+.article-metadata {
+
+}
+
+.row-r-article-metadata {
+
+}
+
+.format-base:before {
+
+    content: " \00A0 \00A0 \2261";
+    font-size: 20px;
+    color: #000;
+}
+
+.format-hidden {
+    display: none;
+}
+
+
+/* http://www.freeformatter.com/html-entities.html https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references */
+.format-descending:before {
+    content: " \0394 ";
+}
+
+.format-solid:before {
+    content: " \039F ";
+}
+
+.format-ascending:before {
+    content: " \2207 "
+}
+
+.format-diamond:before {
+    content: " \25CA ";
+}
+
+.format-hourglass:before {
+    content: " \0398";
+}
+
+
+
+
+
+/* social media */
+/*
+thead#table-namedEntity tr th.socialmedia div.th-inner {
+    padding: 0;
+    margin: 0;
+    border: 1px solid red;
+    height: 24px;
+    width: 24px;
+}
+
+thead#table-namedEntity tr th.socialmedia div.th-inner div.th-inner.sortable.both {
+    border: 1px solid blue;
+    padding-right: 12px;
+    padding-left: 1px;
+    margin: 0;
+} */
+
+
+
+table#namedEntity-table tbody tr td.row-social,
+table#namedEntity-table tbody tr td.row-r-article-metadata {
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 0;
+    margin-left: 0;
+    text-align: center;
+    font-size: .8em;
+}
+/*
+thead#table-namedEntity tr th.row-h-fbshare.socialmedia,
+thead#table-namedEntity tr th.row-h-fblike.socialmedia,
+thead#table-namedEntity tr th.row-h-fbCom.socialmedia,
+thead#table-namedEntity tr th.row-h-gplus.socialmedia,
+thead#table-namedEntity tr th.row-h-linkedIn.socialmedia,
+thead#table-namedEntity tr th.row-h-pinterest.socialmedia {
+    /* border: 3px solid red; */
+   /* margin: 0;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    background-color: #fff;
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+*/
+
+thead#table-namedEntity tr th.socialmedia {
+    background-color: #fff;
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    background-position: 8px 8px;
+}
+
+.darknumber {
+    font-weight: bold;
+}
+
+.lightnumber {
+    color: #bbb;
+}
+
+thead#table-namedEntity tr th.row-h-fbshare.socialmedia,
+thead#table-namedEntity tr th.row-h-fblike.socialmedia,
+thead#table-namedEntity tr th.row-h-fbCom.socialmedia {
+    background-image: url('images/drmst-facebook.svg');
+}
+
+thead#table-namedEntity tr th.row-h-gplus.socialmedia {
+    background-image: url('images/drmst-googleplus.svg');
+}
+
+thead#table-namedEntity tr th.row-h-linkedIn.socialmedia {
+    background-image: url('images/drmst-linkedin.svg');
+}
+
+thead#table-namedEntity tr th.row-h-pinterest.socialmedia {
+    background-image: url('images/drmst-pinterest.svg');
+}
+
+
+
+
+/* .recentArticles_mediaData */
+
+
+

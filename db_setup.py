@@ -25,6 +25,7 @@ rss_id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(30) NOT NULL UNIQUE,
 rssLink VARCHAR(450) NOT NULL UNIQUE,
 avis VARCHAR(40) NOT NULL,
+country VARCHAR(250) DEFAULT 'Denmark'
 medietype ENUM('Dagblad', 'Ugeblad', 'TV', 'Fagblad', 'Radio') NOT NULL,
 sektion ENUM('Kultur', 'Indland', 'Udland', 'Sport', 'Økonomi', 'Politik', 'Debat') NOT NULL,
 lastUpdate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

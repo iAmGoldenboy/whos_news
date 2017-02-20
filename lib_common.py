@@ -8,7 +8,10 @@ from time import sleep
 import dbconfig
 import requests
 import json
+from dbhelper import DBHelper
 
+
+DB = DBHelper()
 
 
 # sorting stuff out :)
@@ -207,3 +210,39 @@ def getSocialCount(socialDict, spread=True):
 
     # print(accumCount)
     return accumCount
+
+
+def recentArticlesFromCellar():
+
+    mergeDict = {}
+    lastHour = DB.countRecentArticles(0,1)
+    threeHours = DB.countRecentArticles(0,3)
+    twentyFourHours = DB.countRecentArticles(0,24)
+    week = DB.countRecentArticles(0,1,"week", "week")
+
+    for itemW in week:
+        try:
+            mergeDict[str("{}-{}".format(itemW[2].replace(" ", "-"),itemW[1]))].update({"week": itemW[0]})
+        except KeyError:
+            mergeDict[str("{}-{}".format(itemW[2].replace(" ", "-"),itemW[1]))] = {"avis": itemW[2], "sektion": itemW[1], "week": itemW[0], "three": 0, "twenty" : 0, "last":0}
+
+
+    for itemTw in twentyFourHours:
+        try:
+            mergeDict[str("{}-{}".format(itemTw[2].replace(" ", "-"),itemTw[1]))].update({"twenty": itemTw[0]})
+        except KeyError:
+            mergeDict[str("{}-{}".format(itemTw[2].replace(" ", "-"),itemTw[1]))] = {"avis": itemTw[2], "sektion": itemTw[1], "twenty": itemTw[0], "three": 0, "week" : 0, "last":0}
+
+    for itemTh in threeHours:
+        try:
+            mergeDict[str("{}-{}".format(itemTh[2].replace(" ", "-"),itemTh[1]))].update({"three": itemTh[0]})
+        except KeyError:
+            mergeDict[str("{}-{}".format(itemTh[2].replace(" ", "-"),itemTh[1]))] = {"avis": itemTh[2], "sektion": itemTh[1], "twenty" : 0, "three": itemTh[0], "week" : 0,  "last" : 0}
+
+    for itemLa in lastHour:
+        try:
+            mergeDict[str("{}-{}".format(itemLa[2].replace(" ", "-"),itemLa[1]))].update({"last": itemLa[0]})
+        except KeyError:
+            mergeDict[str("{}-{}".format(itemLa[2].replace(" ", "-"),itemLa[1]))] = {"avis": itemLa[2], "sektion": itemLa[1], "twenty" : 0, "three" : 0, "week" : 0, "last": itemLa[0]}
+
+    return mergeDict

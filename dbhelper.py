@@ -113,6 +113,24 @@ class DBHelper:
         finally:
             connection.close()
 
+    def countRecentArticles(self,startTime=1, endTime=2, startTimeType="hour", endTimeType="hour"):
+        connection = self.connect()
+        try:
+            query = """SELECT COUNT(*), sektion, avis
+                    FROM articleLinks
+                    WHERE date >= DATE_SUB(NOW(), INTERVAL {} {})
+                       AND date <= DATE_SUB(NOW(), INTERVAL {} {})
+                    GROUP BY sektion, avis
+                    ORDER BY avis, sektion;""".format( endTime, endTimeType, startTime, startTimeType)
+            # print("countRecentArticles : ", query)
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            return cursor.fetchall()
+        except Exception as e:
+            print("Count article que error due to : ", e)
+        finally:
+            connection.close()
+
 
     def countArticlesQue(self):
         connection = self.connect()
@@ -320,4 +338,66 @@ class DBHelper:
         finally:
             connection.close()
 
+
+    def getNamedEntityExact(self,namedEntity):
+        connection = self.connect()
+        try:
+
+            query = """SELECT DISTINCT ne_id, ne, neOccuranceCount AS overallCount, neOccuranceHead AS overallHeadCount, neOccuranceTail AS overallTailCount, neOccurranceShape AS shape, sektion, avis, articleLink, date, article_id
+                        FROM namedEntities
+                        JOIN namedEntity2Articles
+                          on ne2art_ne_id=ne_id
+                        JOIN articleLinks
+                          on ne2art_art_id=article_id
+                        WHERE ne = '{}'
+                        ORDER BY ne, date, avis, sektion, overallCount;""".format(namedEntity)
+
+            # print("getItemID", query)
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            return cursor.fetchall()
+        except Exception as e:
+            print("no where :) to be found due to : ", namedEntity, e)
+        finally:
+            connection.close()
+
+    def getNamedEntityFuzzy(self,namedEntity):
+        connection = self.connect()
+        try:
+
+            query = """SELECT DISTINCT ne_id, ne, neOccuranceCount AS overallCount, neOccuranceHead AS overallHeadCount, neOccuranceTail AS overallTailCount, neOccurranceShape AS shape, sektion, avis, articleLink, date, article_id
+                        FROM namedEntities
+                        JOIN namedEntity2Articles
+                          on ne2art_ne_id=ne_id
+                        JOIN articleLinks
+                          on ne2art_art_id=article_id
+                        WHERE ne LIKE '{}'
+                        ORDER BY ne, date DESC, avis, sektion, overallCount;""".format(namedEntity)
+
+            # print("getItemID", query)
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            return cursor.fetchall()
+        except Exception as e:
+            print("no where :) to be found due to : ", namedEntity, e)
+        finally:
+            connection.close()
+
+    def getSocialMediaDataForArticleID(self,article_id):
+        connection = self.connect()
+        try:
+
+            query = """SELECT DISTINCT date, socialMediaID, socialMediaCount
+                        FROM articleSocialMediaCount
+                        WHERE socialMedia_art_id = {}
+                        ORDER BY date DESC;""".format(article_id)
+
+            # print("getSocialMediaDataForArticleID", query)
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            return cursor.fetchall()
+        except Exception as e:
+            print("No getSocialMediaDataForArticleID data for {} to be found due to : {}".format(article_id, e) )
+        finally:
+            connection.close()
 
