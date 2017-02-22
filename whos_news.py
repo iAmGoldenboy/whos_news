@@ -3,8 +3,10 @@ __projectname__ = 'whos_news / whos_news.py'
 __datum__ = '15/02/17'
 
 from dbhelper import DBHelper
-from flask import Flask, render_template, request
-from lib_common import recentArticlesFromCellar
+from flask import Flask, render_template, request, url_for, redirect
+from lib_common import recentArticlesFromCellar, getKey2nd, getAnalytics
+from collections import Counter
+import stats
 import requests
 # from testcron import runHej
 import schedule
@@ -25,6 +27,9 @@ DB = DBHelper()
 
 @app.route("/")
 def home():
+    # search through the X amount of names we have on stack extracted from X articles since X date
+    # add numbers for how many yesterday
+
     salute = "hej there"
     header = """'Who's News' analyses media websites for information about which persons and organisations are mentioned, when, and in which context."""
     subHeader = """The goal is to transparently connect the dots across media, so users can quickly get an overview of who is being mentioned in the media right now
@@ -73,49 +78,58 @@ def mediaNames(mediaName="", section=""):
     return render_template("base.html", header=mediaName)
 
 
-@app.route("/name")
-@app.route("/name/<namedEntity>")
+
+@app.route("/jam/", methods=['GET', 'POST'])
+@app.route("/jam/<named>")
+def jam(named=""):
+
+    if request.method == 'POST':
+        namedEnt = request.form['namedEnt']
+        return redirect( "{}{}".format(url_for('jam'), namedEnt) )
+    else:
+
+        return render_template("jam-test.html", header="Are you looking for - {}".format(named))
+
+@app.route("/name/", methods=['GET', 'POST'])
+@app.route("/name/<namedEntity>" )
 def namedEntities(namedEntity=""):
 
-    fuzzy = ""
-    subText = ""
-    ne_data = []
-    mergedDict = {}
-    subHeader = ""
-    try:
-        country = request.args.get('country', "DK")
-        fuzzy = request.args.get('fuzzy', "False", type=str)
-    except Exception as e:
+
+    if request.method == 'POST':
+        namedEnt = request.form['searchTerm']
+        check = ""
+        fuzz = ""
+        try:
+            fuzz = request.form['fuzzy']
+            print(fuzz)
+            fuzz = "?fuzzy=True"
+        except Exception as e:
+            pass
+        return redirect( "{}{}{}".format(url_for('namedEntities'), namedEnt, fuzz) )
+
+    else:
+
+        fuzzy = ""
         subText = ""
-        fuzzyText = ""
+        ne_data = []
+        mergedDict = {}
+        subHeader = ""
+        isFuzzy = False
+        analytics = ""
+        shortNames = ""
+        ne_id = ""
+        try:
+            fuzzy = request.args.get('fuzzy', "False", type=str)
+        except Exception as e:
+            pass
 
-    try:
-        if fuzzy == "True":
-            namedEntity = namedEntity.replace("'", " ").replace('"', " ").replace("%", " ").replace(";", " ").replace("\\", " ")
-            ne_data = DB.getNamedEntityFuzzy("%{}%".format(namedEntity) )
-            for article in ne_data:
-                mergedDict["{}_{}".format(article[10],article[0])] = {"date" : article[9], "ne": article[1], "media" : article[7], "section" : article[6], "link": article[8],
-                                           "ToC": article[2], "HeC": article[3], "TaC": article[4], "shape": article[5],
-                                           "Facebook_share_count": 0, "Facebook_comment_count": 0, "GooglePlusOne": 0, "Twitter" : 0,
-                                           'LinkedIn' : 0, 'Pinterest' : 0, 'StumbleUpon': 0, "Facebook_like_count" : 0}
-
-                sm_data = DB.getSocialMediaDataForArticleID(article[10])
-
-                for item in sorted(sm_data, reverse=True):
-                    # print(item)
-                    if item[0] == sorted(sm_data, reverse=True)[0][0]:
-                        mergedDict["{}_{}".format(article[10],article[0])].update( {item[1] : item[2]} )
-
-            # get dif type of names found
-            names = [ne[1] for ne in sorted(ne_data)]
-            subText = " (via <em>udvidet</em> søgning)."
-            subHeader = "Variationer: <em>{}</em>".format(", ".join(set(names)) ) # add anchor text
-
-        else:
-            if namedEntity != "":
-                ne_data = DB.getNamedEntityExact(namedEntity)
+        try:
+            if fuzzy == "True":
+                isFuzzy = True
+                namedEntity = namedEntity.replace("'", " ").replace('"', " ").replace("%", " ").replace(";", " ").replace("\\", " ")
+                ne_data = DB.getNamedEntityFuzzy("%{}%".format(namedEntity) )
                 for article in ne_data:
-                    mergedDict["{}_{}".format(article[10],article[0])] = {"date" : article[9],  "ne": article[1], "media" : article[7], "section" : article[6], "link": article[8],
+                    mergedDict["{}_{}".format(article[10],article[0])] = {"ne_id": article[0], "date" : article[9], "ne": article[1], "media" : article[7], "section" : article[6], "link": article[8],
                                                "ToC": article[2], "HeC": article[3], "TaC": article[4], "shape": article[5],
                                                "Facebook_share_count": 0, "Facebook_comment_count": 0, "GooglePlusOne": 0, "Twitter" : 0,
                                                'LinkedIn' : 0, 'Pinterest' : 0, 'StumbleUpon': 0, "Facebook_like_count" : 0}
@@ -123,19 +137,59 @@ def namedEntities(namedEntity=""):
                     sm_data = DB.getSocialMediaDataForArticleID(article[10])
 
                     for item in sorted(sm_data, reverse=True):
+                        # print(item)
                         if item[0] == sorted(sm_data, reverse=True)[0][0]:
                             mergedDict["{}_{}".format(article[10],article[0])].update( {item[1] : item[2]} )
-            # else get a list of most seen names.
 
-    except Exception as e:
-        pass
+                # get dif type of names found
+                names = [ne[1] for ne in sorted(ne_data)]
+                subText = """ (* via <span class="glyphicon glyphicon-magnet" aria-label="Extended 'Magnet' Search" aria-hidden="true"></span> MAGNET search)."""
+                # subHeader = """Variationer: {}""".format(", ".join(  {ids: datas for ids, datas in Counter(names).items()}  ) ) # add anchor text
+                shortNames = ", ".join(["""<a href="{}" title="{} articles">{}</a>""".format(ids, datas, ids) for ids, datas in sorted(Counter(names).items(), reverse=True, key=getKey2nd)] )
+                if len(names) > 5:
+                    shortNames = "{} + {} more variations".format(", ".join(["""<a href="{}" title="{} articles">{}</a>""".format(ids, datas, ids) for ids, datas in sorted(Counter(names).items(), reverse=True, key=getKey2nd)[:5]] ), len(set(names))-5 )
 
-    header = """{} artikler fundet for: <span class="label label-success">{}</span>""".format(len(ne_data), namedEntity)
+                subHeader = " ".join(["""<a href="{}"><span style="display: inline-block;" class="label label-success">{}  <span class="badge">{}</span></span></a>""".format(ids, ids, datas) for ids, datas in sorted(Counter(names).items(), reverse=True, key=getKey2nd)] )
+                #      <a href=""><button class="btn btn-primary" type="button">{} <span class="badge">{}</span></button></a>
+                subHeader = """<p>Too many results? Try <a href="{}">without extended magnet search</a>.</p> <br>{}""".format(namedEntity, subHeader)
+            else:
+                if namedEntity != "":
+                    ne_data = DB.getNamedEntityExact(namedEntity)
+                    for article in ne_data:
+                        mergedDict["{}_{}".format(article[10],article[0])] = {"ne_id": article[0], "date" : article[9],  "ne": article[1], "media" : article[7], "section" : article[6], "link": article[8],
+                                                   "ToC": article[2], "HeC": article[3], "TaC": article[4], "shape": article[5],
+                                                   "Facebook_share_count": 0, "Facebook_comment_count": 0, "GooglePlusOne": 0, "Twitter" : 0,
+                                                   'LinkedIn' : 0, 'Pinterest' : 0, 'StumbleUpon': 0, "Facebook_like_count" : 0}
 
-    return render_template("namedEntity.html", header=header, ne_data=mergedDict, namedEntity=namedEntity, subHeader=subHeader, subText=subText)
+                        sm_data = DB.getSocialMediaDataForArticleID(article[10])
 
-    # try:
-    #     intervalTime = request.args.get('tidsInterval', 24)
+                        for item in sorted(sm_data, reverse=True):
+                            if item[0] == sorted(sm_data, reverse=True)[0][0]:
+                                mergedDict["{}_{}".format(article[10],article[0])].update( {item[1] : item[2]} )
+                # else get a list of most seen names.
+                    subHeader = """<p>Too few results? Try <a href="{}?fuzzy=True">the extended magnet search</a>.</p> <br>{}""".format(namedEntity, subHeader)
+
+        except Exception as e:
+            pass
+
+        # this should be added to a database and if more than a few hours old, then do new calculation
+        # perhaps also do it for time periods on week and month basis
+        analytics = getAnalytics(mergedDict)
+
+
+        # se og på om der er vækst  - del puljen i to til at starte med - derefter kan man gå pr. uge eller måned
+        asterisk = ""
+        if isFuzzy:
+            asterisk = "*"
+
+        header = """{} artikler fundet for: <span class="label label-success">{}{}</span>""".format(len(ne_data), namedEntity, " {}".format(asterisk))
+
+        return render_template("namedEntity.html", header=header, ne_data=mergedDict, ne=namedEntity,
+                               subHeader="<p style='line-height: 32px;'>{}</p>".format(subHeader),
+                               subText=subText, isFuzzy=isFuzzy, analytics=analytics, namesSet=shortNames)
+
+
+
 
 @app.route("/om-projektet")
 def omProjektet():

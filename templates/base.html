@@ -31,13 +31,15 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/js.js') }}"  charset="utf-8"></script>
 
     {% block head %}
 
-    <title> {% if salute %}  {{ salute }} - {% elif namedEntity %} Results for: {{ namedEntity }} in the Media. {% endif %} Whos News</title>
+    <title> {% if salute %}  {{ salute }} - {% elif ne %} Results for: {{ ne }} in the Media. {% endif %} Whos News</title>
 
     {% endblock %}
-
 
 
 </head>
@@ -46,18 +48,31 @@
 
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Who's Hot?</a>
-                </div>
+
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="/">Home</a></li>
+                        <li><a href="/"><span class="glyphicon glyphicon-home" aria-label="HOME" aria-hidden="true"></span></a></li>
                         <li><a href="{{ url_for('namedEntities') }}">Navne</a></li>
                         <li><a href="{{ url_for('mediaNames') }}">Medier</a></li>
-                        <li><a href="{{ url_for('omProjektet') }}"><span class="glyphicon glyphicon-bullhorn" aria-label="About the Project" aria-hidden="true"></span> Om Projektet</a></li>
-                        <li><a href="/"><span class="glyphicon glyphicon-wrench" aria-label="Documentation" aria-hidden="true"></span> Documentation</a></li>
-                        <li><a href="/"><span class="glyphicon glyphicon-envelope" aria-label="Contact" aria-hidden="true"></span> Contact</a></li>
-                        <li><a href="/"><span class="glyphicon glyphicon-piggy-bank" aria-label="Donate" aria-hidden="true"></span> Donate</a></li>
+                        <li><a href="{{ url_for('omProjektet') }}">Om Projektet <span class="glyphicon glyphicon-bullhorn" aria-label="About the Project" aria-hidden="true"></span></a></li>
+                        <li><a href="/">Documentation <span class="glyphicon glyphicon-wrench" aria-label="Documentation" aria-hidden="true"></span></a></li>
+                        <li><a href="/">Contact <span class="glyphicon glyphicon-envelope" aria-label="Contact" aria-hidden="true"></span> </a></li>
+                        <li><a href="/">Donate <span class="glyphicon glyphicon-piggy-bank" aria-label="Donate" aria-hidden="true"></span></a ></li>
+                        <!--Search bar-->
+                        <li>
+                                <!--<div class="col-md-6 col-md-offset-3">-->
+
+                            <form class="navbar-form navbar-left" method="POST" action="{{ url_for('namedEntities' )  }}" role="search">
+
+                                <div class="form-group">
+                                    <input type="text" name="searchTerm" class="form-control" placeholder="Search for names">
+                                </div>
+                                <button type="submit" name="submit" value="Submit" class="btn btn-default">Go!</button>
+                                <label data-toggle="tooltip" data-placement="bottom" data-html="true" title="Extended Magnet Search"  style="color:white"><input type="checkbox" name="fuzzy" value=""> <span  class="glyphicon glyphicon-magnet" aria-label="Extended 'Magnet' Search" aria-hidden="true"></span>SE MAGNET</label>
+
+                            </form>
+                                <!--</div>-->
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -65,8 +80,9 @@
         <div class="container theme-showcase" role="main">
 
             <div class="jumbotron">
-                {% if namedEntity %}<h1> Whos news </h1> <p> scorecard for  {{ namedEntity }}</p> <br>
-                    <p>Share/tweet scoreboard </p>
+                {% if ne %}<h1>Scorecard for <span class="label label-success">{{ ne }} {% if isFuzzy==True %}*{% endif %}</span> </h1>
+                {% if isFuzzy==True %}<small><b>*</b> Via extended search. Including: (<i>{{ namesSet | safe  }}</i>)</small>{% endif %}
+                <p>Share/tweet scoreboard </p>
                     <a class="btn btn-primary btn-lg" href="#" role="button">Tweet</a>
                     <a class="btn btn-primary btn-lg" href="#" role="button">Facebook</a>
 
@@ -74,11 +90,12 @@
                 <p>...</p>
 
             </div>
-            <ol class="breadcrumb">
-  <li><a href="#">Home</a></li>
-  <li><a href="#">Library</a></li>
-  <li class="active">Data</li>
-</ol>
+
+            <!--<ol class="breadcrumb">-->
+                <!--<li><a href="#">Home</a></li>-->
+                <!--<li><a href="#">Library</a></li>-->
+                <!--<li class="active">Data</li>-->
+            <!--</ol>-->
 
             <div class="page-header">
 
@@ -95,13 +112,16 @@
         </div>
 
 
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
+
         <script src="{{ url_for('static', filename='style/lib/bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='style/lib/bootstrap-table/bootstrap-table.js') }}"></script>
-
         <script src="{{ url_for('static', filename='style/lib/bootstrap-table/bootstrap-table.js') }}"></script>
+
+
 
         <!-- put your locale files after bootstrap-table.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table-locale-all.js"></script>
@@ -115,7 +135,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/natural-sorting/bootstrap-table-natural-sorting.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/resizable/bootstrap-table-resizable.js"></script>
 
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
     </body>
 
 

@@ -4,6 +4,8 @@
         <div class="row">
             <div class="container">
                 <h3><span class="glyphicon glyphicon-eye-open" aria-label="Documentation" aria-hidden="true"></span> SUMMARY:</h3>
+                <p>{% if teststuff %}  {{ teststuff  }} {% endif %}</p>
+                <p>{% if analytics %}  {{ analytics  }} {% endif %}</p>
             </div>
         </div>
 
@@ -30,31 +32,31 @@
                                 <th data-field="sektion" data-sortable="true" class="row-h-category" rowspan="2">Kategori</th>
                                 <th data-field="avis"    data-sortable="true" class="row-h-media"  rowspan="2">Avis</th>
                                 <th rowspan="2">Link</th>
-                                <th colspan="6">Sociale Medier</th>
+                                <th colspan="5">Sociale Medier <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<b>Social Media:</b><br>Facebook Shares, Facebook Comments, Google+, LinkedIn, Pinterest. Regarding Facebook, shares and likes are the same. Regarding Twitter - or lack of - the Twitter API does no longer supply sharing info.<br><b>Source:</b> sharedcount.com" aria-label="Social Media Info" aria-hidden="true"></span></th>
 
                                 <!-- th class="format-type" colspan="1" title="Formen på det aftryk navnet har igennem teksten">FORM</th -->
-                                <th colspan="4">Algoritme metadata <span class="glyphicon glyphicon-info-sign" aria-label="Donate" aria-hidden="true"></span> </th>
+                                <th colspan="4">Algoritme metadata <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<b>Algorithm metadata:</b><br>Each article is processed to extract information about Names (named entities).<br><b>Source:</b> internal processing of articles. See 'about' and 'documentation' for more infomation."  aria-label="Article Metadata" aria-hidden="true"></span> </th>
 
                             </tr>
                             <tr>
-                                <th data-field="fbshare"    class="row-h-fbshare socialmedia"   data-sortable="true" title="Facebook - Share" alt="Facebook - Share"></th>
-                                <th data-field="fblike"     class="row-h-fblike socialmedia"    data-sortable="true" title="Facebook - Like" alt="Facebook - Like"></th>
-                                <th data-field="fbCom"      class="row-h-fbCom socialmedia"     data-sortable="true" title="Facebook - Comments" alt="Facebook - Comments"></th>
-                                <th data-field="gplus"      class="row-h-gplus socialmedia"     data-sortable="true" title="Google +" alt="Google +"></th>
-                                <th data-field="linkedIn"   class="row-h-linkedIn socialmedia"  data-sortable="true" title="LinkedIn" alt="LinkedIn"></th>
-                                <th data-field="pinterest"  class="row-h-pinterest  socialmedia" data-sortable="true" title="Pinterest" alt="Pinterest"></th>
+                                <th data-field="fbshare"    class="row-h-fbshare socialmedia"   data-sortable="true" title="Facebook - Share. (Source: sharedcount.com)" alt="Facebook - Share"></th>
+                                <!--<th data-field="fblike"     class="row-h-fblike socialmedia"    data-sortable="true" title="Facebook - Like" alt="Facebook - Like"></th>-->
+                                <th data-field="fbCom"      class="row-h-fbCom socialmedia"     data-sortable="true" title="Facebook - Comments. (Source: sharedcount.com)" alt="Facebook - Comments"></th>
+                                <th data-field="gplus"      class="row-h-gplus socialmedia"     data-sortable="true" title="Google +. (Source: sharedcount.com)" ALT="Google +"></th>
+                                <th data-field="linkedIn"   class="row-h-linkedIn socialmedia"  data-sortable="true" title="LinkedIn. (Source: sharedcount.com)" ALT="LinkedIn"></th>
+                                <th data-field="pinterest"  class="row-h-pinterest  socialmedia" data-sortable="true" title="Pinterest. (Source: sharedcount.com)" ALT="Pinterest"></th>
 
                                 <th data-field="ialt"   data-sortable="true" class="row-h-ToC article-metadata">
-                                    <span class="glyphicon glyphicon-align-justify" aria-label="Times Found in Article" aria-hidden="true"> </span>
+                                    <span class="glyphicon glyphicon-align-justify" data-toggle="tooltip" data-placement="bottom" data-html="true" title="The number of times the name appears throughout the article." aria-label="Times Found in Article" aria-hidden="true"> </span>
                                 </th>
                                 <th data-field="head"   data-sortable="true" class="row-h-HeC article-metadata" title="lidt tekst">
-                                    <span class="glyphicon glyphicon-king"   aria-label="Times found in head-pieces" aria-hidden="true"> </span>
+                                    <span class="glyphicon glyphicon-king"  data-toggle="tooltip" data-placement="bottom" data-html="true" title="The number of times<br>the name appears in<br>the headline, subheadline,<br>image captions and quotes. Note: This is why it might look like there is a discrepancy between 'shape' and Head and Tail count" aria-label="Times found in head-pieces" aria-hidden="true"> </span>
                                 </th>
                                 <th data-field="tail"   data-sortable="true" class="row-h-TaC article-metadata">
-                                    <span class="glyphicon glyphicon-pawn"   aria-label="Times found in body-copy" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-pawn"  data-toggle="tooltip" data-placement="bottom" data-html="true" title="The number of times<br>the name appears in<br>the body-copy"  aria-label="Times found in body-copy" aria-hidden="true"></span>
                                 </th>
-                                <th data-field="form"   data-sortable="true" class="row-h-shape article-metadata" title="Formen på det aftryk navnet har igennem teksten">
-                                    <span class="glyphicon glyphicon-signal" aria-label="Name signal shape" aria-hidden="true"> </span>
+                                <th data-field="form"   data-sortable="true" class="row-h-shape article-metadata">
+                                    <span class="glyphicon glyphicon-signal" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Shape of the form the name's appearance creates across the entire article (running text).<br>In Head: <i><b>Descending</b></i><br>In Tail: <i><b>Ascending</b></i><br>In Middle: <i><b>Diamond</b></i><br>Throughout: <i><b>Solid</b></i><br>Head/Tail: <i><b>Hourglass</b></i>" aria-label="Name signal shape" aria-hidden="true"> </span>
                                 </th>
 
 
@@ -65,22 +67,21 @@
                             {% for id, data in ne_data.items() %}
                                 <tr>
                                     <td class="row-r-date" >{{ data.date }}</td>
-                                    <td class="row-r-name">{{ data.ne }}</td>
+                                    <td class="row-r-name id_{{ data.ne_id }}" title="id_{{ data.ne_id }}">{{ data.ne }}</td>
                                     <td class="row-r-sektion">{{ data.section }}</td>
                                     <td class="row-r-avis">{{ data.media }}</td>
                                     <td class="row-r-link"><a href="{{ data.link }}" title="Læs mere hos: {{ data[7] }}">{{ data.link.replace('http://', '').replace('https://', '').replace('www.', '') | truncateLinks() }}</a></td>
 
-                                    <td class="row-r-FB-share row-social {% if data.Facebook_share_count > 0 %}darknumber {% else %} lightnumber {% endif %}">{{ data.Facebook_share_count }}</td>
-                                    <td class="row-r-FB-like row-social {% if data.Facebook_like_count > 0 %}darknumber {% else %} lightnumber {% endif %}" >{{ data.Facebook_like_count }}</td>
+                                    <td class="row-r-FB-share row-social {% if data.Facebook_share_count > 999 %}smallfont  {% endif %} {% if data.Facebook_share_count > 0 %}darknumber {% else %} lightnumber {% endif %}">{{ data.Facebook_share_count }}</td>
                                     <td class="row-r-FB-Com row-social {% if data.Facebook_comment_count > 0 %}darknumber {% else %} lightnumber {% endif %}" >{{ data.Facebook_comment_count }}</td>
                                     <td class="row-r-Gplus row-social {% if data.GooglePlusOne > 0 %}darknumber {% else %} lightnumber {% endif %}" >{{ data.GooglePlusOne }}</td>
                                     <td class="row-r-linkedIn row-social {% if data.LinkedIn > 0 %}darknumber {% else %} lightnumber {% endif %}" >{{ data.LinkedIn }}</td>
-                                    <td class="row-r-Pinterest row-social {% if data.Pinterest > 0 %}darknumber {% else %} lightnumber {% endif %}l" >{{ data.Pinterest }}</td>
+                                    <td class="row-r-Pinterest row-social {% if data.Pinterest > 0 %}darknumber {% else %} lightnumber {% endif %}" >{{ data.Pinterest }}</td>
 
                                     <td class="row-r-ToC row-r-article-metadata {% if data.ToC > 0 %}darknumber {% else %} lightnumber {% endif %}">{{ data.ToC }}</td>
                                     <td class="row-r-HeC row-r-article-metadata {% if data.HeC > 0 %}darknumber {% else %} lightnumber {% endif %}">{{ data.HeC }}</td>
                                     <td class="row-r-TaC row-r-article-metadata {% if data.TaC > 0 %}darknumber {% else %} lightnumber {% endif %}">{{ data.TaC }}</td>
-                                    <td class="format-{{ data.shape }}  row-r-article-metadata format-type" title="Navnet {{ data.ne }}'s tilstedeværelse i teksten har formen: {{ data.shape }}" alt="Navnet {{ data.ne }}'s tilstedeværelse i teksten har formen: {{ data.shape }}"><span class="format-hidden">{{ data.shape }}</span></td>
+                                    <td class="format-{{ data.shape }}  row-r-article-metadata shape-type" title="Navnet {{ data.ne }}'s tilstedeværelse i teksten har formen: {{ data.shape }}" alt="Navnet {{ data.ne }}'s tilstedeværelse i teksten har formen: {{ data.shape }}"><span class="format-hidden">{{ data.shape }}</span></td>
 
 
 
