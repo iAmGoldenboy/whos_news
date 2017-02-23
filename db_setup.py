@@ -26,12 +26,18 @@ name VARCHAR(30) NOT NULL UNIQUE,
 rssLink VARCHAR(450) NOT NULL UNIQUE,
 avis VARCHAR(40) NOT NULL,
 country VARCHAR(250) DEFAULT 'Denmark',
-medietype ENUM('Dagblad', 'Ugeblad', 'TV', 'Fagblad', 'Radio') NOT NULL,
+medietype ENUM('Dagblad', 'Ugeblad', 'TV', 'Fagblad', 'Radio') NOT NULL, /* should translate */
+/* reach ENUM('Regional', 'Natiaonal', 'International') NOT NULL, */ /* Perhaps some kind of list for which regions */
 sektion ENUM('Kultur', 'Indland', 'Udland', 'Sport', 'Økonomi', 'Politik', 'Debat') NOT NULL,
 lastUpdate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY(`rss_id`, `avis`)
 ) ENGINE=INNODB;
 
+/* table for former dudds - that have been split in two - because I need to curate this shit
+NE's that are curated, have to be marked as such and receive less points
+*/
+
+/* table for analytics to cut down on the processing - gets updated every ten minutes */
 
 CREATE TABLE IF NOT EXISTS NE_database.html_tags (
 html_id INT NOT NULL AUTO_INCREMENT,
@@ -76,6 +82,7 @@ FOREIGN KEY (`socialMedia_art_id`)
 CREATE TABLE IF NOT EXISTS NE_database.namedEntities (
 ne_id INT NOT NULL AUTO_INCREMENT,
 ne VARCHAR(60) NOT NULL UNIQUE,
+/* added from duddification - some kind of value or score */
 addedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY(`ne_id`, `ne`)
 ) ENGINE=INNODB;

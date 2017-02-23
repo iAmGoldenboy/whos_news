@@ -4,7 +4,9 @@ __datum__ = '15/02/17'
 
 from dbhelper import DBHelper
 from flask import Flask, render_template, request, url_for, redirect
-from lib_common import recentArticlesFromCellar, getKey2nd, getAnalytics
+from lib_common import recentArticlesFromCellar, getKey2nd
+from lib_analysis import getAnalytics
+from lib_graphics import pieChart, pieChart2, testpie
 from collections import Counter
 import stats
 import requests
@@ -35,6 +37,9 @@ def home():
     subHeader = """The goal is to transparently connect the dots across media, so users can quickly get an overview of who is being mentioned in the media right now
     and in the past, but also let users drill down into the data in a granular manner and subscribe to results via RSS or the API.
     The curious guest is pointed to <a href=''>the FAQ</a>, the verbose guest is pointed to <a href=''>the forum</a>. """
+
+    # find your pulse (practicality)
+    # or grab a scorecard (gamification)
 
     return render_template("base.html", salute=salute, header=header, subHeader=subHeader)
 
@@ -176,6 +181,37 @@ def namedEntities(namedEntity=""):
         # perhaps also do it for time periods on week and month basis
         analytics = getAnalytics(mergedDict)
 
+        # [{"label":"Category A", "value":20},
+		 #          {"label":"Category B", "value":50},
+		 #          {"label":"Category C", "value":30}];
+
+        pieNames = ["#firstpie"]
+
+        # print("anni", analytics)
+        # for data in analytics:
+        #     print(data[0], data[1].get("perc"))
+        #     print({"label": "{} {}% ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "value" : float("{}".format(data[1].get("perc")))} )
+        pieData = [{"label": "{} {} ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "count" : int("{}".format(int(data[1].get("count"))))}  for data in analytics]
+
+        # print(pieChart("firstpie", analytics, "#firstpie"))
+        d3js = [
+            # {"id" : "firstpie",
+            #      "chart" : pieChart("firstpie", pieData, "#firstpie", width=100, height=100),
+            #      "title": "Pr. Section",
+            #      "description": "This is desc",
+            #      "legend" : " ".join(["<li>{} {}% ({})</li> ".format(data[0], data[1].get("perc"), data[1].get("count"))  for data in analytics]) },
+
+                {"chart" : testpie(pieData),
+                 "title" : "title",
+                 "description": "description",
+                 "id" : "chart"
+                }
+            ,
+                # {"chart" : pieChart2("secondPie", pieData, "#secondPie"),
+                # "id" : "secondPie",
+                # "title" : "Second Pie",
+                # "description" : "Descondos txt"}
+                ]
 
         # se og på om der er vækst  - del puljen i to til at starte med - derefter kan man gå pr. uge eller måned
         asterisk = ""
@@ -186,7 +222,7 @@ def namedEntities(namedEntity=""):
 
         return render_template("namedEntity.html", header=header, ne_data=mergedDict, ne=namedEntity,
                                subHeader="<p style='line-height: 32px;'>{}</p>".format(subHeader),
-                               subText=subText, isFuzzy=isFuzzy, analytics=analytics, namesSet=shortNames)
+                               subText=subText, isFuzzy=isFuzzy, analytics=analytics, namesSet=shortNames, d3js=d3js, )
 
 
 

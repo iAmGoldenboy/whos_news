@@ -3,15 +3,49 @@
 
         <div class="row">
             <div class="container">
+                <h3><span class="glyphicon glyphicon-eye-open" aria-label="Documentation" aria-hidden="true"></span>: Most recent articles:</h3>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="container">
                 <h3><span class="glyphicon glyphicon-eye-open" aria-label="Documentation" aria-hidden="true"></span> SUMMARY:</h3>
                 <p>{% if teststuff %}  {{ teststuff  }} {% endif %}</p>
-                <p>{% if analytics %}  {{ analytics  }} {% endif %}</p>
+
+                {% if d3js %}
+                    {% for graph in d3js  %}
+                        <div id="outer_{{ graph.id }}">
+                            <h4>{{ graph.title }}</h4>
+                            <div id="graph_box_{{ graph.id }}" class="graph_box">
+                                <div id="{{ graph.id }}"></div>
+                                <script>{{ graph.chart | safe }}</script>
+                                <div id="legend_{{ graph.id }}" class="legend">
+
+                                    {% if graph.legend  %}
+                                        <ul>
+                                            {{ graph.legend | safe }}
+                                        </ul>
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <div id="description_{{ graph.id }}">
+                                <p> {{ graph.description }}</p>
+                            </div>
+
+
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
 
         <div class="row">
             <div class="container">
                 <h3><span class="glyphicon glyphicon-stats" aria-label="Documentation" aria-hidden="true"></span> ANALYTICS:</h3>
+                <div id="chart"></div>
             </div>
         </div>
 
@@ -21,6 +55,13 @@
                 <div class="table-responsive">
                     <table class="table table-hover" id="namedEntity-table"
                             data-toggle="table"
+
+                            data-show-refresh="true"
+                            data-show-columns="true"
+                            data-search="true"
+                            data-query-params="queryParams"
+                            data-toolbar=".toolbar"
+
                             data-sort-name="date"
                             data-sort-order="desc"
                             data-striped="true">
@@ -39,24 +80,28 @@
 
                             </tr>
                             <tr>
-                                <th data-field="fbshare"    class="row-h-fbshare socialmedia"   data-sortable="true" title="Facebook - Share. (Source: sharedcount.com)" alt="Facebook - Share"></th>
+                                <th data-field="fbshare"    class="row-h-fbshare socialmedia"   data-sortable="true" title="Facebook - Share. (Source: sharedcount.com)" alt="Facebook - Share"><span class="hiddentext">Facebook Share/Likes</span></th>
                                 <!--<th data-field="fblike"     class="row-h-fblike socialmedia"    data-sortable="true" title="Facebook - Like" alt="Facebook - Like"></th>-->
-                                <th data-field="fbCom"      class="row-h-fbCom socialmedia"     data-sortable="true" title="Facebook - Comments. (Source: sharedcount.com)" alt="Facebook - Comments"></th>
-                                <th data-field="gplus"      class="row-h-gplus socialmedia"     data-sortable="true" title="Google +. (Source: sharedcount.com)" ALT="Google +"></th>
-                                <th data-field="linkedIn"   class="row-h-linkedIn socialmedia"  data-sortable="true" title="LinkedIn. (Source: sharedcount.com)" ALT="LinkedIn"></th>
-                                <th data-field="pinterest"  class="row-h-pinterest  socialmedia" data-sortable="true" title="Pinterest. (Source: sharedcount.com)" ALT="Pinterest"></th>
+                                <th data-field="fbCom"      class="row-h-fbCom socialmedia"     data-sortable="true" title="Facebook - Comments. (Source: sharedcount.com)" alt="Facebook - Comments"><span class="hiddentext">Facebook Comments</span></th>
+                                <th data-field="gplus"      class="row-h-gplus socialmedia"     data-sortable="true" title="Google +. (Source: sharedcount.com)" ALT="Google +"><span class="hiddentext">Google+</span></th>
+                                <th data-field="linkedIn"   class="row-h-linkedIn socialmedia"  data-sortable="true" title="LinkedIn. (Source: sharedcount.com)" ALT="LinkedIn"><span class="hiddentext">LinkedIn</span></th>
+                                <th data-field="pinterest"  class="row-h-pinterest  socialmedia" data-sortable="true" title="Pinterest. (Source: sharedcount.com)" ALT="Pinterest"><span class="hiddentext">Pinterest</span></th>
 
                                 <th data-field="ialt"   data-sortable="true" class="row-h-ToC article-metadata">
                                     <span class="glyphicon glyphicon-align-justify" data-toggle="tooltip" data-placement="bottom" data-html="true" title="The number of times the name appears throughout the article." aria-label="Times Found in Article" aria-hidden="true"> </span>
+                                    <span class="hiddentext">Entire article</span>
                                 </th>
                                 <th data-field="head"   data-sortable="true" class="row-h-HeC article-metadata" title="lidt tekst">
                                     <span class="glyphicon glyphicon-king"  data-toggle="tooltip" data-placement="bottom" data-html="true" title="The number of times<br>the name appears in<br>the headline, subheadline,<br>image captions and quotes. Note: This is why it might look like there is a discrepancy between 'shape' and Head and Tail count" aria-label="Times found in head-pieces" aria-hidden="true"> </span>
+                                    <span class="hiddentext">In Head</span>
                                 </th>
                                 <th data-field="tail"   data-sortable="true" class="row-h-TaC article-metadata">
                                     <span class="glyphicon glyphicon-pawn"  data-toggle="tooltip" data-placement="bottom" data-html="true" title="The number of times<br>the name appears in<br>the body-copy"  aria-label="Times found in body-copy" aria-hidden="true"></span>
+                                    <span class="hiddentext">In Tail</span>
                                 </th>
                                 <th data-field="form"   data-sortable="true" class="row-h-shape article-metadata">
                                     <span class="glyphicon glyphicon-signal" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Shape of the form the name's appearance creates across the entire article (running text).<br>In Head: <i><b>Descending</b></i><br>In Tail: <i><b>Ascending</b></i><br>In Middle: <i><b>Diamond</b></i><br>Throughout: <i><b>Solid</b></i><br>Head/Tail: <i><b>Hourglass</b></i>" aria-label="Name signal shape" aria-hidden="true"> </span>
+                                    <span class="hiddentext">Shape</span>
                                 </th>
 
 

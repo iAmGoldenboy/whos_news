@@ -124,6 +124,36 @@ shape-type {
 }
 
 
+thead#table-namedEntity tr th.socialmedia div.th-inner.sortable.both span.hiddentext {
+    font-size: 0;
+}
+
+
+      #chart {                                                          /* NEW */
+        height: 360px;                                                  /* NEW */
+        position: relative;                                             /* NEW */
+        width: 360px;                                                   /* NEW */
+      }                                                                 /* NEW */
+      .tooltip {                                                        /* NEW */
+        background: #eee;                                               /* NEW */
+        box-shadow: 0 0 5px #999999;                                    /* NEW */
+        color: #333;                                                    /* NEW */
+        display: none;                                                  /* NEW */
+        font-size: 12px;                                                /* NEW */
+        left: 130px;                                                    /* NEW */
+        padding: 10px;                                                  /* NEW */
+        position: absolute;                                             /* NEW */
+        text-align: center;                                             /* NEW */
+        top: 95px;                                                      /* NEW */
+        width: 80px;                                                    /* NEW */
+        z-index: 10;                                                    /* NEW */
+      }                                                                 /* NEW */
+      .legend {
+        font-size: 12px;
+      }
+      rect {
+        stroke-width: 2;
+      }
 
 
 
@@ -218,3 +248,269 @@ thead#table-namedEntity tr th.row-h-pinterest.socialmedia {
 
 
 
+/* FORMS */
+
+label#magnet-search {
+    color: #fff;
+}
+
+
+
+
+/* Media Queries */
+
+@media (max-width: 1200px) {
+    #myNavbar {
+        border: 2px solid green;
+    }
+
+    label#magnet-search {
+        color: #fff;
+        width: 50px;
+        overflow: visible;
+        vertical-align: middle;
+        margin-bottom: 0;
+        margin-top: 2px;
+        line-height: 1;
+
+    }
+
+    .navbar-form .form-control {
+        display: inline-block;
+        vertical-align: middle;
+        width: 120px;
+    }
+
+    #myNavbar .navbar-nav  a.donate-nav-link,
+    #myNavbar .navbar-nav  a.contact-nav-link {
+        font-size: 0;
+    }
+
+    #myNavbar .navbar-nav  a.donate-nav-link:before,
+    #myNavbar .navbar-nav  a.contact-nav-link:before {
+        line-height:1;
+        padding: 2px 0px;
+        font-family:"Glyphicons Halflings";
+        font-size: 15px;
+        display:inline-block;
+    }
+
+    #myNavbar .navbar-nav li a.donate-nav-link:before {
+        content: "\e225";
+    }
+
+    #myNavbar .navbar-nav li a.contact-nav-link:before {
+        content: "\2709";
+    }
+
+}
+
+@media (max-width: 992px) {
+    #myNavbar {
+        border: 2px solid red;
+    }
+
+    #myNavbar a.navbar-brand {
+        font-size: 12px;
+    }
+
+    #myNavbar .navbar-nav  a.howto-nav-link,
+    #myNavbar .navbar-nav  a.about-nav-link {
+        font-size: 0;
+    }
+
+    #myNavbar .navbar-nav  a.howto-nav-link:before,
+    #myNavbar .navbar-nav  a.about-nav-link:before {
+        line-height:1;
+        padding: 2px 0px;
+        font-family:"Glyphicons Halflings";
+        font-size: 15px;
+        display:inline-block;
+    }
+
+    #myNavbar .navbar-nav li a.howto-nav-link:before {
+        content: "\e136";
+    }
+
+    #myNavbar .navbar-nav li a.about-nav-link:before {
+        content: "\e122";
+    }
+
+
+
+    .navbar-form {
+    margin-right: 0;
+    padding-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+    width: 220px;
+    }
+
+    input#searchTerm {
+        width: 110px;
+    }
+
+
+}
+
+@media (max-width: 768px) {
+    #myNavbar {
+        border: 2px solid blue;
+    }
+
+    html body nav.navbar.navbar-inverse.navbar-fixed-top div.container div.navbar-header {
+        float: left;
+        clear: none;
+    }
+
+    .navbar-form {
+        width: auto;
+        box-shadow: 0 0px 0 rgba(255, 255, 255, 0.0), 0 0px 0 rgba(255, 255, 255, 0.0);
+        padding: 3px 0 3px 0;
+        margin: 3px 0 3px 0;
+    }
+
+
+    #searchInputGroup {
+        float: left;
+        width: 60%;
+        margin-right: 5px;
+    }
+
+    #myNavbar .navbar-nav  a.howto-nav-link,
+    #myNavbar .navbar-nav  a.about-nav-link,
+    #myNavbar .navbar-nav  a.donate-nav-link,
+    #myNavbar .navbar-nav  a.contact-nav-link {
+        font-size: inherit;
+    }
+}
+
+@media (max-width: 508px) {
+
+    .navbar-inverse .navbar-brand,
+    .navbar-inverse .navbar-nav > li > a {
+        border: 2px solid green;
+        font-size: 0;
+    }
+
+    .navbar-inverse .navbar-brand,
+    .navbar-inverse .navbar-nav > li > a {
+        content: "\e021";
+        line-height:1;
+        padding: 2px 0px;
+        font-family:"Glyphicons Halflings";
+        font-size: 15px;
+        display:inline-block;
+    }
+}
+
+/*
+@media (max-width: 1000px) {
+
+    #navbar {
+        border: 2px solid red;
+    }
+
+    label#magnet-search {
+        color: #fff;
+        width: 50px;
+        overflow: visible;
+        vertical-align: middle;
+        margin-bottom: 0;
+        margin-top: 2px;
+        line-height: 1;
+
+    }
+
+    /*.navbar-form {
+        width: 250px;
+    }*/
+/*
+    .navbar-form .form-control {
+        display: inline-block;
+        vertical-align: middle;
+        width: 120px;
+    }
+
+}
+
+
+/*
+@media (max-width: 1052px) {
+
+    #navbar {
+        border: 3px solid green;
+    }
+
+    .navbar-form {
+        width: 250px;
+    }
+
+    .navbar-form .form-control {
+        width: 100px;
+    }
+
+    #navbar .navbar-nav  a.donate-nav-link,
+    #navbar .navbar-nav  a.contact-nav-link {
+        font-size: 0;
+    }
+
+    #navbar .navbar-nav  a.donate-nav-link:before,
+    #navbar .navbar-nav  a.contact-nav-link:before {
+        line-height:1;
+        padding: 2px 0px;
+        font-family:"Glyphicons Halflings";
+        font-size: 15px;
+        display:inline-block;
+    }
+
+    #navbar .navbar-nav li a.donate-nav-link:before {
+        content: "\e225";
+    }
+
+    #navbar .navbar-nav li a.contact-nav-link:before {
+        content: "\2709";
+    } */
+
+
+
+    /* img.desktop {
+        display: none;
+    }
+
+    img.mobile {
+        display: block;
+    } */
+}
+
+
+/*
+
+@media (max-width: 760px) {
+    #navbar {
+        border: 2px solid yellow;
+    }
+
+    .navbar-form .form-control {
+        width: 110px;
+    }
+
+    #navbar .navbar-nav li a.about-nav-link {
+        font-size: 0;
+    }
+
+    #navbar .navbar-nav li a.about-nav-link:before {
+        line-height:1;
+        padding: 2px 0px;
+        font-family:"Glyphicons Halflings";
+        font-size: 15px;
+        display:inline-block;
+    }
+
+    #navbar .navbar-nav li a.about-nav-link:before {
+        content: "\e122";
+    }
+
+
+}
+*/
