@@ -77,9 +77,22 @@ def computeTokenDataDict(namedEntityMergedDict):
     tokenList = ["shape", "media", "section"]
     return {output: extractTokenValues(namedEntityMergedDict, output) for output in tokenList}
 
+
+
 def getDateXdaysAgo(days=1):
     # http://stackoverflow.com/questions/441147/how-can-i-subtract-a-day-from-a-python-date?rq=1
     return datetime.date.today() - datetime.timedelta(days=days)
+
+def peakDays(namedEntityMergedDict):
+
+    timeType = "%Y-%m-%d %H:%M:%S" # 2017-02-18 09:35:42
+    try:
+        weekdays = dict(Counter([datetime.datetime.strptime(str(datas.get("date")), timeType).strftime('%A') for _, datas in namedEntityMergedDict.items()]))
+    except Exception as e:
+        weekdays = {'Friday': 0, 'Monday': 0, 'Saturday': 0, 'Sunday': 0, 'Tuesday': 0, 'Thursday': 0, 'Wednesday': 0}
+
+    return weekdays
+
 
 
 
@@ -118,7 +131,10 @@ def compareNumbers(now, then):
 def getAnalytics(namedEntityMergedDict):
 
     dates = [datetime.datetime.date(datas.get("date")) for _, datas in namedEntityMergedDict.items()]
-    dates = "Earliest: {} <br>Latest: {}".format( min(dates), max(dates), len(dates) )
+    try:
+        dates = "Earliest: {} <br>Latest: {}".format( min(dates), max(dates), len(dates) )
+    except Exception as e:
+        dates = 0
     print(dates)
 
     oneDay = getDateXdaysAgo(1)
@@ -132,18 +148,6 @@ def getAnalytics(namedEntityMergedDict):
     lastWeek = {id: data for id, data in namedEntityMergedDict.items() if datetime.datetime.date(data.get("date")) >= sevenDays and datetime.datetime.date(data.get("date")) <= oneDay}
     lastMonth = {id: data for id, data in namedEntityMergedDict.items() if datetime.datetime.date(data.get("date")) >= month and datetime.datetime.date(data.get("date")) <= oneDay}
     # allTime = {id: data for id, data in namedEntityMergedDict.items() if datetime.datetime.date(data.get("date")) <= month}
-
-
-    # print("today", len([data.get("date") for _, data in today.items()]), [datetime.datetime.date(data.get("date")) for _, data in today.items()])
-    # print("lastThree", len([data.get("date") for _, data in lastThree.items()]), [datetime.datetime.date(data.get("date")) for _, data in lastThree.items()])
-    # print("lastWeek", len([data.get("date") for _, data in lastWeek.items()]), [datetime.datetime.date(data.get("date")) for _, data in lastWeek.items()])
-    # print("lastMonth", len([data.get("date") for _, data in lastMonth.items()]), [datetime.datetime.date(data.get("date")) for _, data in lastMonth.items()])
-    # print("allTime", len([data.get("date") for _, data in allTime.items()]), [datetime.datetime.date(data.get("date")) for _, data in allTime.items()])
-
-    # print("today", [data.get("date") for _, data in today.items()])
-    # for day in dates:
-    #     print(type(day))
-    #     print(datetime.datetime.strptime(day, dateformat) )
 
     # get quartile values and percentages for number data
     quartileDataDict_ALL = computeQuartileDataDict(namedEntityMergedDict)
@@ -161,7 +165,7 @@ def getAnalytics(namedEntityMergedDict):
 
     # when comparing remember to split/average by lastThree/week/month etc??
 
-    print("MON", quartileDataDict_lastMonth.get("Facebook_share_count"), quartileDataDict_lastMonth.get("Facebook_share_count").get("mean")) # ToC, HeC, TaC, Facebook_comment_count
+    print("MONTH", quartileDataDict_lastMonth.get("Facebook_share_count"), quartileDataDict_lastMonth.get("Facebook_share_count").get("mean")) # ToC, HeC, TaC, Facebook_comment_count, Facebook_share_count
     print("Wek", quartileDataDict_lastWeek.get("Facebook_share_count"), quartileDataDict_lastWeek.get("Facebook_share_count").get("mean")) # ToC, HeC, TaC, Facebook_comment_count
     print("Thr", quartileDataDict_lastThree.get("Facebook_share_count"), quartileDataDict_lastThree.get("Facebook_share_count").get("mean"))
     print("tod", quartileDataDict_today.get("Facebook_share_count"), quartileDataDict_today.get("Facebook_share_count").get("mean"))
@@ -180,4 +184,7 @@ def getAnalytics(namedEntityMergedDict):
     print(tokenDataDict_lastWeek.get("shape"))
     # split data into two halves to see if there is growth or decline
 
-    return tokenDataDict_lastWeek.get("section")
+    peakDays(namedEntityMergedDict)
+    # print(computeTokenDataDict(peakDays(namedEntityMergedDict)))
+
+    return tokenDataDict_ALL.get("section")

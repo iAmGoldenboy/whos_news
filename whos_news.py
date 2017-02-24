@@ -191,7 +191,7 @@ def namedEntities(namedEntity=""):
         # for data in analytics:
         #     print(data[0], data[1].get("perc"))
         #     print({"label": "{} {}% ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "value" : float("{}".format(data[1].get("perc")))} )
-        pieData = [{"label": "{} {} ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "count" : int("{}".format(int(data[1].get("count"))))}  for data in analytics]
+        pieData = [{"label": "{} {}% ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "count" : int("{}".format(int(data[1].get("count"))))}  for data in analytics]
 
         # print(pieChart("firstpie", analytics, "#firstpie"))
         d3js = [
