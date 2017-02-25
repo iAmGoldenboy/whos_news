@@ -219,34 +219,50 @@ def getSocialCount(socialDict, spread=True):
 def recentArticlesFromCellar():
 
     mergeDict = {}
+    minute = DB.countRecentArticles(0,5,"minute", "minute")
     lastHour = DB.countRecentArticles(0,1)
     threeHours = DB.countRecentArticles(0,3)
     twentyFourHours = DB.countRecentArticles(0,24)
     week = DB.countRecentArticles(0,1,"week", "week")
+    month = DB.countRecentArticles(0,1,"month", "month")
+
+
+    for itemM in month:
+        try:
+            mergeDict[str("{}-{}".format(itemM[2].replace(" ", "-"),itemM[1]))].update({"month": itemM[0]})
+        except KeyError:
+            mergeDict[str("{}-{}".format(itemM[2].replace(" ", "-"),itemM[1]))] = {"avis": itemM[2], "sektion": itemM[1], "month": itemM[0], "week": 0, "three": 0,  "minute": 0, "twenty" : 0, "last":0}
+
 
     for itemW in week:
         try:
             mergeDict[str("{}-{}".format(itemW[2].replace(" ", "-"),itemW[1]))].update({"week": itemW[0]})
         except KeyError:
-            mergeDict[str("{}-{}".format(itemW[2].replace(" ", "-"),itemW[1]))] = {"avis": itemW[2], "sektion": itemW[1], "week": itemW[0], "three": 0, "twenty" : 0, "last":0}
+            mergeDict[str("{}-{}".format(itemW[2].replace(" ", "-"),itemW[1]))] = {"avis": itemW[2], "sektion": itemW[1], "week": itemW[0], "three": 0, "month": 0,  "minute": 0, "twenty" : 0, "last":0}
 
 
     for itemTw in twentyFourHours:
         try:
             mergeDict[str("{}-{}".format(itemTw[2].replace(" ", "-"),itemTw[1]))].update({"twenty": itemTw[0]})
         except KeyError:
-            mergeDict[str("{}-{}".format(itemTw[2].replace(" ", "-"),itemTw[1]))] = {"avis": itemTw[2], "sektion": itemTw[1], "twenty": itemTw[0], "three": 0, "week" : 0, "last":0}
+            mergeDict[str("{}-{}".format(itemTw[2].replace(" ", "-"),itemTw[1]))] = {"avis": itemTw[2], "sektion": itemTw[1], "twenty": itemTw[0], "three": 0, "month": 0, "minute": 0,  "week" : 0, "last":0}
 
     for itemTh in threeHours:
         try:
             mergeDict[str("{}-{}".format(itemTh[2].replace(" ", "-"),itemTh[1]))].update({"three": itemTh[0]})
         except KeyError:
-            mergeDict[str("{}-{}".format(itemTh[2].replace(" ", "-"),itemTh[1]))] = {"avis": itemTh[2], "sektion": itemTh[1], "twenty" : 0, "three": itemTh[0], "week" : 0,  "last" : 0}
+            mergeDict[str("{}-{}".format(itemTh[2].replace(" ", "-"),itemTh[1]))] = {"avis": itemTh[2], "sektion": itemTh[1], "twenty" : 0, "three": itemTh[0],"month": 0,   "minute": 0, "week" : 0,  "last" : 0}
 
     for itemLa in lastHour:
         try:
             mergeDict[str("{}-{}".format(itemLa[2].replace(" ", "-"),itemLa[1]))].update({"last": itemLa[0]})
         except KeyError:
-            mergeDict[str("{}-{}".format(itemLa[2].replace(" ", "-"),itemLa[1]))] = {"avis": itemLa[2], "sektion": itemLa[1], "twenty" : 0, "three" : 0, "week" : 0, "last": itemLa[0]}
+            mergeDict[str("{}-{}".format(itemLa[2].replace(" ", "-"),itemLa[1]))] = {"avis": itemLa[2], "sektion": itemLa[1], "twenty" : 0, "three" : 0, "month": 0, "week" : 0, "minute": 0, "last": itemLa[0]}
+
+    for itemMi in minute:
+        try:
+            mergeDict[str("{}-{}".format(itemMi[2].replace(" ", "-"),itemMi[1]))].update({"minute": itemMi[0]})
+        except KeyError:
+            mergeDict[str("{}-{}".format(itemMi[2].replace(" ", "-"),itemMi[1]))] = {"avis": itemMi[2], "sektion": itemMi[1], "twenty" : 0, "three" : 0, "month": 0, "week" : 0, "last": 0, "minute": itemMi[0]}
 
     return mergeDict

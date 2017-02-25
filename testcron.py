@@ -320,7 +320,7 @@ def deleteOldArticles():
 def mySchedule():
     schedule.every(1).minutes.do(insertArticleLinksFromFeedsIntoArticleQue)
     schedule.every(2).minutes.do(extractArticleData)
-    schedule.every(1).hours.do(deleteOldArticles)
+    schedule.every(10).minutes.do(deleteOldArticles)
 
     while True:
         schedule.run_pending()

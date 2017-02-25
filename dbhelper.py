@@ -122,7 +122,7 @@ class DBHelper:
                        AND date <= DATE_SUB(NOW(), INTERVAL {} {})
                     GROUP BY sektion, avis
                     ORDER BY avis, sektion;""".format( endTime, endTimeType, startTime, startTimeType)
-            # print("countRecentArticles : ", query)
+            print("countRecentArticles : ", query)
             with connection.cursor() as cursor:
                 cursor.execute(query)
             return cursor.fetchall()
@@ -401,3 +401,24 @@ class DBHelper:
         finally:
             connection.close()
 
+    def getArticleCountPerMedia(self):
+
+        connection = self.connect()
+        try:
+
+            query = """ SELECT rss_feeds.avis, rss_feeds.sektion, rssLink,   count(article_id)
+                    FROM rss_feeds
+                    JOIN articleLinks
+                      ON rss_feeds.avis=articleLinks.avis
+                      AND rss_feeds.sektion=articleLinks.sektion
+                    GROUP BY name
+                    ORDER BY rss_feeds.avis, rss_feeds.sektion;
+                 """
+
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            return cursor.fetchall()
+        except Exception as e:
+            print("No getArticleCountPerMedia data to be found - due to : {}".format( e) )
+        finally:
+            connection.close()

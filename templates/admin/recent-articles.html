@@ -11,10 +11,12 @@
                         <tr>
                             <th>Avis</th>
                             <th>Sektion</th>
+                            <th>Seneste 5 min</th>
                             <th>Seneste time</th>
                             <th>Seneste 3 timer</th>
                             <th>Seneste Døgn</th>
                             <th>Seneste Uge</th>
+                            <th>Seneste Måned</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,10 +34,12 @@
                                             {{ item[1].get("sektion") }}
                                         </a>
                                     </td>
+                                    <td class="recentArticles_mediaData-hour" id="recentArticles_mediaData-minute_{{ item[1].get('avis') }}">{{ item[1].get("minute") }}</td>
                                     <td class="recentArticles_mediaData-hour" id="recentArticles_mediaData-hour_{{ item[1].get('avis') }}">{{ item[1].get("last") }}</td>
                                     <td class="recentArticles_mediaData-3hours" id="recentArticles_mediaData-3hours_{{ item[1].get('avis') }}">{{ item[1].get("three") }}</td>
                                     <td class="recentArticles_mediaData-24hours" id="recentArticles_mediaData-24hours_{{ item[1].get('avis') }}">{{ item[1].get("twenty") }}</td>
                                     <td class="recentArticles_mediaData-week" id="recentArticles_mediaData-week_{{ item[1].get('avis') }}">{{ item[1].get("week") }}</td>
+                                    <td class="recentArticles_mediaData-month" id="recentArticles_mediaData-month_{{ item[1].get('avis') }}">{{ item[1].get("month") }}</td>
 
                                 </tr>
 
@@ -60,10 +64,12 @@
                                             {{ item[1].get("sektion") }}
                                         </a>
                                     </td>
+                                    <td class="recentArticles_mediaData-hour" id="recentArticles_mediaData-minute_{{ item[1].get('avis') }}">{{ item[1].get("minute") }}</td>
                                     <td class="recentArticles_mediaData-hour" id="recentArticles_mediaData-hour_{{ item[1].get('avis') }}">{{ item[1].get("last") }}</td>
                                     <td class="recentArticles_mediaData-3hours" id="recentArticles_mediaData-3hours_{{ item[1].get('avis') }}">{{ item[1].get("three") }}</td>
                                     <td class="recentArticles_mediaData-24hours" id="recentArticles_mediaData-24hours_{{ item[1].get('avis') }}">{{ item[1].get("twenty") }}</td>
                                     <td class="recentArticles_mediaData-week" id="recentArticles_mediaData-week_{{ item[1].get('avis') }}">{{ item[1].get("week") }}</td>
+                                    <td class="recentArticles_mediaData-month" id="recentArticles_mediaData-month_{{ item[1].get('avis') }}">{{ item[1].get("month") }}</td>
 
                                 </tr>
                             {% endif %}

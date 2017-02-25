@@ -38,6 +38,10 @@ NE's that are curated, have to be marked as such and receive less points
 */
 
 /* table for analytics to cut down on the processing - gets updated every ten minutes */
+CREATE TABLE IF NOT EXISTS NE_database.socialWatchlist (
+socWatch_id INT NOT NULL AUTO_INCREMENT,
+) ENGINE=INNODB;
+
 
 CREATE TABLE IF NOT EXISTS NE_database.html_tags (
 html_id INT NOT NULL AUTO_INCREMENT,
@@ -253,6 +257,7 @@ INSERT INTO html_tags (avis, tagData, tagArea)
     VALUES ('Kristeligt Dagblad', '.post-author-name a', 'bylineTag' );
 INSERT INTO html_tags (avis, tagData, tagArea)
     VALUES ('Kristeligt Dagblad', '.content p', 'introTag' );
+
 
 """
             cursor.execute(sql)

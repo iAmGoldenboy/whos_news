@@ -55,17 +55,17 @@ def recentArticles():
     """ Overview of recent article by paper/section/1 hour/3 hours/24 hours/week
     :return:
     """
-    recentArticlesDict =recentArticlesFromCellar()
+    recentArticlesDict = recentArticlesFromCellar()
     waitingCount = DB.countArticlesQueNotSeen()
     header = """Antal tekster analyseret det seneste døgn/uge"""
     subHeader = """Antal tekster i kø: <span class="badge">{}</span>""".format(waitingCount[0][0])
 
     return render_template("admin/recent-articles.html", header=header, subHeader=subHeader, recentArticles=sorted(recentArticlesDict.items()))
 
-@app.route("/medium")
-@app.route("/medium/<mediaName>")
-@app.route("/medium/<mediaName>/<section>")
-def mediaNames(mediaName="", section=""):
+@app.route("/dash/media")
+# @app.route("/medium/<mediaName>")
+# @app.route("/medium/<mediaName>/<section>")
+def mediaNames(mediaName=""):
 
 
     try:
@@ -73,10 +73,9 @@ def mediaNames(mediaName="", section=""):
     except Exception as e:
         pass
 
-    if mediaName == "" and section == "":
+    if mediaName == "":
         mediaName = "Media - main page"
-    elif section != "":
-        mediaName = "{} - {}".format(mediaName, section)
+
     else:
         mediaName = mediaName
 
