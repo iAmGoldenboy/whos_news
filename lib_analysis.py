@@ -4,7 +4,7 @@ __datum__ = '15/02/17'
 
 import stats
 from collections import Counter
-import datetime
+import datetime, timeit
 from lib_common import getKey2nd
 
 
@@ -38,11 +38,18 @@ def calculatePercentage(quartileCount, allCount):
 def getQuartilesData(numbersList):
     mean = 0
     median = 0
+    quartiles = 0.0, 0.0, 0.0
     inQuarts = countValuesInQuartiles(numbersList)
     q1, q2, q3 = inQuarts
-    q1percent = calculatePercentage(inQuarts[0], len(numbersList))
-    q2percent = calculatePercentage(inQuarts[1], len(numbersList))
-    q3percent = calculatePercentage(inQuarts[2], len(numbersList))
+    q1percent = calculatePercentage(q1, len(numbersList))
+    q2percent = calculatePercentage(q2, len(numbersList))
+    q3percent = calculatePercentage(q3, len(numbersList))
+
+    try:
+        quartiles = stats.quartiles(numbersList)
+    except Exception as e:
+        pass
+
     try:
         median = stats.median(numbersList)
     except Exception as e:
@@ -53,7 +60,7 @@ def getQuartilesData(numbersList):
     except Exception as e:
         pass
 
-    return {"mean": mean, "median": median, "Q1": round(q1,2), "Q2": round(q2,2), "Q3": round(q3,2), "Q1Perc": round(q1percent,2), "Q2Perc": round(q2percent,2), "Q3Perc": round(q3percent,2), "quartiles": inQuarts}
+    return {"mean": mean, "median": median, "Q1": round(q1,2), "Q2": round(q2,2), "Q3": round(q3,2), "Q1Perc": round(q1percent,2), "Q2Perc": round(q2percent,2), "Q3Perc": round(q3percent,2), "quartileCount": inQuarts, "quartiles" : quartiles}
 
 
 def extractNumberValues(namedEntityMergedDict, itemToLookFor):
@@ -67,6 +74,7 @@ def extractTokenValues(namedEntityMergedDict, itemToLookFor):
     #     print(id, data, round(calculatePercentage(data, count),2) )
 
     return [[id, {"count": data, "perc": round(calculatePercentage(data, count),2)}] for id, data in sorted(counterDict.items(), reverse=True, key=getKey2nd)]
+
 
 
 def computeQuartileDataDict(namedEntityMergedDict):
@@ -84,6 +92,7 @@ def getDateXdaysAgo(days=1):
     return datetime.date.today() - datetime.timedelta(days=days)
 
 def peakDays(namedEntityMergedDict):
+    # http://stackoverflow.com/questions/16766643/convert-date-string-to-day-of-week
 
     timeType = "%Y-%m-%d %H:%M:%S" # 2017-02-18 09:35:42
     try:
@@ -125,17 +134,82 @@ def compareNumbers(now, then):
     return compNumDict
 
 
+def datesMinMaxCount(namedEntityMergedDict):
 
+    dates = [datetime.datetime.date(datas.get("date")) for _, datas in namedEntityMergedDict.items()]
+    try:
+        dateList = [str(min(dates)), str(max(dates)), len(dates)]
+    except Exception as e:
+        dateList = ["0-0-0", "0-0-0", 0]
+
+    return dateList
+
+def setupAnalysisDict(namedEntityMergedDict):
+
+    analysisDict = {}
+
+    # check if any NEs have been saved to database, if not, create new.
+    # create one bag for each NE and one for all NEs
+    # earliest publication date, latest publication date
+
+    topExcludeList = ["link", "Twitter", "Facebook_like_count", "StumbleUpon", "ne_id", "Facebook_total_count"]
+    collectionExcludeList = ["link", "Twitter", "Facebook_like_count", "Facebook_total_count", "StumbleUpon"]
+
+    for id, data in namedEntityMergedDict.items():
+        # and one for all
+        if data.get("ne") not in analysisDict:
+
+            analysisDict[data.get("ne")] = {}
+
+            for item in data:
+                if item not in topExcludeList:
+                    analysisDict[data.get("ne")].update({ item : [data.get(item)]} )
+
+            analysisDict[data.get("ne")].update({"dailyStats" : { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "threeDayStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "weekStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "monthStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "allStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} }})
+
+        else:
+            for item in data:
+                if item not in topExcludeList:
+                    analysisDict[data.get("ne")][item].append(data.get(item))
+
+
+        if "collection" not in analysisDict:
+
+            analysisDict["collection"] = {}
+
+            for item in data:
+                if item not in collectionExcludeList:
+                    analysisDict["collection"].update({ item : [data.get(item)]} )
+
+            analysisDict["collection"].update({"dailyStats" : { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "threeDayStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "weekStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "monthStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} },
+                                                "allStats": { "ToC" : {}, "HeC" : {}, "TaC": {}, "shape": (), "media": {}, "section": {}, "dates": {}, "ne": {},
+                                                                 "Pinterest" : {}, "LinkedIn" : {}, "GooglePlusOne" : {}, "Facebook_comment_count" : {}, "Facebook_share_count" : {} }})
+        else:
+            for item in data:
+                if item not in topExcludeList:
+                    analysisDict["collection"][item].append(data.get(item))
+
+    return analysisDict
 
 
 def getAnalytics(namedEntityMergedDict):
 
-    dates = [datetime.datetime.date(datas.get("date")) for _, datas in namedEntityMergedDict.items()]
-    try:
-        dates = "Earliest: {} <br>Latest: {}".format( min(dates), max(dates), len(dates) )
-    except Exception as e:
-        dates = 0
-    print(dates)
 
     oneDay = getDateXdaysAgo(1)
     threeDays = getDateXdaysAgo(3)
@@ -143,6 +217,62 @@ def getAnalytics(namedEntityMergedDict):
     month = getDateXdaysAgo(30)
     halfYear = getDateXdaysAgo(182)
     year = getDateXdaysAgo(365)
+
+
+    nemd = namedEntityMergedDict
+    dateList = datesMinMaxCount(namedEntityMergedDict)
+    print(dateList)
+
+    analysisDict = setupAnalysisDict(namedEntityMergedDict)
+
+
+    # print(analysisDict)
+    exStats = ["dailyStats", "threeDayStats", "weekStats", "monthStats", "allStats" ] #, "halfYearStats", "yearStats"]
+    valueItems = ["TaC", "ToC", "HeC", "LinkedIn", "Facebook_share_count", "Facebook_comment_count", "GooglePlusOne", "Pinterest", ]
+    tokenItems = ["media", "section", "shape"]
+
+    for id, data in analysisDict.items():
+        # print(id, data)
+        dailyStats, threeDayStats, weekStats, monthStats, allStats = [], [], [], [], []
+
+        # get hold of the index of each item by using the date's index
+        statsDict = {   "dailyStats" : [(data.get("date").index(date)) for date in data.get("date") if datetime.datetime.date(date) > oneDay],
+                        "threeDayStats" : [(data.get("date").index(date)) for date in data.get("date") if datetime.datetime.date(date)  >= threeDays and datetime.datetime.date(date) <= oneDay],
+                        "weekStats" : [(data.get("date").index(date)) for date in data.get("date") if datetime.datetime.date(date)  >= sevenDays and datetime.datetime.date(date) <= oneDay],
+                        "monthStats" : [(data.get("date").index(date)) for date in data.get("date") if datetime.datetime.date(date)  >= month and datetime.datetime.date(date) <= oneDay],
+                        "allStats" : [(data.get("date").index(date)) for date in data.get("date") if datetime.datetime.date(date)] }
+
+        for item in data:
+            # print(item)
+            if item in valueItems:
+                for statType in exStats:
+                    # print(statType, item, getQuartilesData([data.get(item)[itemindex] for itemindex in statsDict.get(statType)]) )
+                    analysisDict[id][statType][item] = getQuartilesData([data.get(item)[itemindex] for itemindex in statsDict.get(statType)])
+                # print("i", item, "t", lastThree, "it", [data.get(item)[itemindex] for itemindex in lastThree])
+                # print(item, getQuartilesData([data.get(item)[itemindex] for itemindex in lastThree]))
+
+            if item in tokenItems:
+                for statType in exStats:
+                # print("i", item, "t", lastThree, "it", [data.get(item)[itemindex] for itemindex in lastMonth])
+                    tokenCount = dict(Counter([data.get(item)[itemindex] for itemindex in statsDict.get("monthStats")]))
+                    count = sum(tokenCount.values())
+                    # for id, data in counterDict.items():
+                    #     print(id, data, round(calculatePercentage(data, count),2) )
+                    analysisDict[id][statType][item] = {id: {"count": data, "perc": round(calculatePercentage(data, count),2)} for id, data in sorted(tokenCount.items(), reverse=True, key=getKey2nd)}
+
+                    # print("kkk", item, "--", {id: {"count": data, "perc": round(calculatePercentage(data, count),2)} for id, data in sorted(tokenCount.items(), reverse=True, key=getKey2nd)} )
+
+
+
+
+        print(id, analysisDict[id])
+        # print(dailyStats)
+        # print(threeDayStats)
+        # print(weekStats)
+        # print(monthStats)
+        # print(allStats)
+
+
     today = {id: data for id, data in namedEntityMergedDict.items() if datetime.datetime.date(data.get("date")) > oneDay}
     lastThree = {id: data for id, data in namedEntityMergedDict.items() if datetime.datetime.date(data.get("date")) >= threeDays and datetime.datetime.date(data.get("date")) <= oneDay}
     lastWeek = {id: data for id, data in namedEntityMergedDict.items() if datetime.datetime.date(data.get("date")) >= sevenDays and datetime.datetime.date(data.get("date")) <= oneDay}
@@ -166,7 +296,7 @@ def getAnalytics(namedEntityMergedDict):
     # when comparing remember to split/average by lastThree/week/month etc??
 
     print("MONTH", quartileDataDict_lastMonth.get("Facebook_share_count"), quartileDataDict_lastMonth.get("Facebook_share_count").get("mean")) # ToC, HeC, TaC, Facebook_comment_count, Facebook_share_count
-    print("Wek", quartileDataDict_lastWeek.get("Facebook_share_count"), quartileDataDict_lastWeek.get("Facebook_share_count").get("mean")) # ToC, HeC, TaC, Facebook_comment_count
+    print("Wek", quartileDataDict_lastWeek.get("Facebook_share_count"), quartileDataDict_lastWeek.get("Facebook_share_count").get("mean")) # ToC, HeC, TaC, Facebook_comment_count, GooglePlusOne, LinkedIn, StumbleUpon, Pinterest, Twitter
     print("Thr", quartileDataDict_lastThree.get("Facebook_share_count"), quartileDataDict_lastThree.get("Facebook_share_count").get("mean"))
     print("tod", quartileDataDict_today.get("Facebook_share_count"), quartileDataDict_today.get("Facebook_share_count").get("mean"))
     print("com 3-> w", compareNumbers(quartileDataDict_lastThree.get("Facebook_share_count").get("mean"), quartileDataDict_lastWeek.get("Facebook_share_count").get("mean")))
@@ -187,4 +317,6 @@ def getAnalytics(namedEntityMergedDict):
     peakDays(namedEntityMergedDict)
     # print(computeTokenDataDict(peakDays(namedEntityMergedDict)))
 
-    return tokenDataDict_ALL.get("section")
+    # return tokenDataDict_ALL.get("section")
+
+    return analysisDict

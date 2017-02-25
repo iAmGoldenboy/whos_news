@@ -235,7 +235,37 @@ def pieChart2( uniqueDataName, dataDict, chartID, width=200, height=200, donutwi
 
     return bakedPie
 
-def testpie(pieData):
+def colours():
+
+    """/* As RGBa codes */
+
+        .rgba-primary-0 { color: rgba(206, 90, 46,1) }	/* Main Primary color */
+        .rgba-primary-1 { color: rgba(255,168,135,1) }
+        .rgba-primary-2 { color: rgba(228,123, 85,1) }
+        .rgba-primary-3 { color: rgba(167, 62, 22,1) }
+        .rgba-primary-4 { color: rgba(128, 35,  0,1) }
+
+        .rgba-secondary-1-0 { color: rgba(206,137, 46,1) }	/* Main Secondary color (1) */
+        .rgba-secondary-1-1 { color: rgba(255,203,135,1) }
+        .rgba-secondary-1-2 { color: rgba(228,166, 85,1) }
+        .rgba-secondary-1-3 { color: rgba(167,104, 22,1) }
+        .rgba-secondary-1-4 { color: rgba(128, 72,  0,1) }
+
+        .rgba-secondary-2-0 { color: rgba( 36, 92,132,1) }	/* Main Secondary color (2) */
+        .rgba-secondary-2-1 { color: rgba( 96,141,172,1) }
+        .rgba-secondary-2-2 { color: rgba( 60,110,146,1) }
+        .rgba-secondary-2-3 { color: rgba( 20, 71,107,1) }
+        .rgba-secondary-2-4 { color: rgba(  5, 50, 82,1) }
+
+        .rgba-complement-0 { color: rgba( 32,143, 92,1) }	/* Main Complement color */
+        .rgba-complement-1 { color: rgba( 97,184,144,1) }
+        .rgba-complement-2 { color: rgba( 58,157,112,1) }
+        .rgba-complement-3 { color: rgba( 15,116, 70,1) }
+        .rgba-complement-4 { color: rgba(  0, 88, 48,1) } """
+
+    return ["rgba(206, 90, 46,1)", "rgba( 36, 92,132,1)", "rgba(206,137, 46,1)", "rgba( 32,143, 92,1)", "rgba(255,168,135,1)", "rgba(128, 72,  0,1)", "rgba( 96,141,172,1)", "rgba(  0, 88, 48,1)", "rgba(167, 62, 22,1)", "color: rgba(228,166, 85,1)", "rgba( 20, 71,107,1)", "rgba( 58,157,112,1)" ]
+
+def testpie(pieData, chartName):
 
     pieChars =  """
                 (function(d3) {
@@ -244,26 +274,27 @@ def testpie(pieData):
 
     pieChars += """    var dataset = {} ;""".format(pieData)
 
-    pieChars += """    var width = 460;
-        var height = 360;
+    pieChars += """    var width = 180;
+        var height = 180;
         var radius = Math.min(width, height) / 2;
-        var donutWidth = 180;
+        var donutWidth = 90;
         var legendRectSize = 18;                                  // NEW
         var legendSpacing = 4;                                    // NEW
 
-        var color = d3.scaleOrdinal(d3.schemeCategory20b);
+        var color = d3.scaleOrdinal({});
 
 
 
-        var svg = d3.select('#chart')
+        var svg = d3.select('{}')
           .append('svg')
           .attr('width', width)
           .attr('height', height)
           .append('g')
           .attr('transform', 'translate(' + (width / 2) +
             ',' + (height / 2) + ')');
+            """.format(colours(), chartName)
 
-        var arc = d3.arc()
+    pieChars += """    var arc = d3.arc()
           .innerRadius(radius - donutWidth)
           .outerRadius(radius - (donutWidth-70));
 
@@ -271,7 +302,7 @@ def testpie(pieData):
           .value(function(d) { return d.count; })
           .sort(null);
 
-        var tooltip = d3.select('#chart')                               // NEW
+        /*var tooltip = d3.select('#chart')                               // NEW
           .append('div')                                                // NEW
           .attr('class', 'tooltipe');                                    // NEW
 
@@ -282,7 +313,7 @@ def testpie(pieData):
           .attr('class', 'count');                                      // NEW
 
         tooltip.append('div')                                           // NEW
-          .attr('class', 'percent');                                    // NEW
+          .attr('class', 'percent');                                    // NEW */
 
         var path = svg.selectAll('path')
           .data(pie(dataset))
@@ -293,7 +324,7 @@ def testpie(pieData):
             return color(d.data.label);
           });
 
-        path.on('mouseover', function(d) {                            // NEW
+        /* path.on('mouseover', function(d) {                            // NEW
             var total = d3.sum(dataset.map(function(d) {                // NEW
               return d.count;                                           // NEW
             }));                                                        // NEW
@@ -330,7 +361,7 @@ def testpie(pieData):
         legend.append('text')                                     // NEW
           .attr('x', legendRectSize + legendSpacing)              // NEW
           .attr('y', legendRectSize - legendSpacing)              // NEW
-          .text(function(d) { return d; });                       // NEW
+          .text(function(d) { return d; });                       // NEW */
 
       })(window.d3);
      """

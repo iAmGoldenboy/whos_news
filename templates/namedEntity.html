@@ -15,16 +15,23 @@
 
                 {% if d3js %}
                     {% for graph in d3js  %}
-                        <div id="outer_{{ graph.id }}">
+                        <div id="outer_{{ graph.id }}" class="col-md-3">
                             <h4>{{ graph.title }}</h4>
                             <div id="graph_box_{{ graph.id }}" class="graph_box">
+
                                 <div id="{{ graph.id }}"></div>
                                 <script>{{ graph.chart | safe }}</script>
+
+
                                 <div id="legend_{{ graph.id }}" class="legend">
 
                                     {% if graph.legend  %}
                                         <ul>
-                                            {{ graph.legend | safe }}
+
+                                            {% for item in graph.legend  %}
+                                                <li style="color:{{ colours[ loop.index0 ] }}">{{ item.label }}</li>
+
+                                            {% endfor %}
                                         </ul>
 
                                     {% endif %}

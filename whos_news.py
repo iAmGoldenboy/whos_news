@@ -4,9 +4,9 @@ __datum__ = '15/02/17'
 
 from dbhelper import DBHelper
 from flask import Flask, render_template, request, url_for, redirect
-from lib_common import recentArticlesFromCellar, getKey2nd
+from lib_common import recentArticlesFromCellar, getKey2nd, getKey1st
 from lib_analysis import getAnalytics
-from lib_graphics import pieChart, pieChart2, testpie
+from lib_graphics import pieChart, pieChart2, testpie, colours
 from collections import Counter
 import stats
 import requests
@@ -26,6 +26,7 @@ from nltk.collocations import *
 app = Flask(__name__, static_folder='static')
 start_time = time.time()
 DB = DBHelper()
+colours = colours()
 
 @app.route("/")
 def home():
@@ -181,6 +182,8 @@ def namedEntities(namedEntity=""):
         # perhaps also do it for time periods on week and month basis
         analytics = getAnalytics(mergedDict)
 
+        print("ana", sorted(analytics.get("collection").get("allStats").get("section").items(), key=lambda x: x[1].get("count") ) )
+
         # [{"label":"Category A", "value":20},
 		 #          {"label":"Category B", "value":50},
 		 #          {"label":"Category C", "value":30}];
@@ -191,9 +194,16 @@ def namedEntities(namedEntity=""):
         # for data in analytics:
         #     print(data[0], data[1].get("perc"))
         #     print({"label": "{} {}% ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "value" : float("{}".format(data[1].get("perc")))} )
-        pieData = [{"label": "{} {}% ({})".format(data[0], data[1].get("perc"), data[1].get("count")), "count" : int("{}".format(int(data[1].get("count"))))}  for data in analytics]
+        pieDataMedier = [{"label": "{} {}% ({})".format(id, data.get("perc"), data.get("count")), "count" : int("{}".format(int(data.get("count"))))}  for id, data in sorted(analytics.get("collection").get("allStats").get("media").items(), key=lambda x: x[1].get("count"), reverse=True ) ]
+        pieDataSektion = [{"label": "{} {}% ({})".format(id, data.get("perc"), data.get("count")), "count" : int("{}".format(int(data.get("count"))))}  for id, data in sorted(analytics.get("collection").get("allStats").get("section").items(), key=lambda x: x[1].get("count"), reverse=True)]
+        pieDataShape = [{"label": "{} {}% ({})".format(id, data.get("perc"), data.get("count")), "count" : int("{}".format(int(data.get("count"))))}  for id, data in sorted(analytics.get("collection").get("allStats").get("shape").items(), key=lambda x: x[1].get("count"), reverse=True)]
+
 
         # print(pieChart("firstpie", analytics, "#firstpie"))
+        print("sec", pieDataMedier)
+
+        # for item in pieDataSec:
+
         d3js = [
             # {"id" : "firstpie",
             #      "chart" : pieChart("firstpie", pieData, "#firstpie", width=100, height=100),
@@ -201,12 +211,25 @@ def namedEntities(namedEntity=""):
             #      "description": "This is desc",
             #      "legend" : " ".join(["<li>{} {}% ({})</li> ".format(data[0], data[1].get("perc"), data[1].get("count"))  for data in analytics]) },
 
-                {"chart" : testpie(pieData),
-                 "title" : "title",
-                 "description": "description",
-                 "id" : "chart"
+                {"chart" : testpie(pieDataMedier, "#chart1"),
+                 "title" : "Medier",
+                 "description": "descriptions",
+                 "id" : "chart1",
+                 "legend": pieDataMedier
                 }
             ,
+            {"chart" : testpie(pieDataSektion, "#chart2"),
+                 "title" : "Sektion",
+                 "description": "descriptions 2",
+                 "id" : "chart2",
+                 "legend" : pieDataSektion
+                },
+            {"chart" : testpie(pieDataShape, "#chart3"),
+                 "title" : "Shape",
+                 "description": "descriptions 3",
+                 "id" : "chart3",
+                 "legend" : pieDataShape
+                }
                 # {"chart" : pieChart2("secondPie", pieData, "#secondPie"),
                 # "id" : "secondPie",
                 # "title" : "Second Pie",
@@ -221,7 +244,7 @@ def namedEntities(namedEntity=""):
         header = """{} artikler fundet for: <span class="label label-success">{}{}</span>""".format(len(ne_data), namedEntity, " {}".format(asterisk))
 
         return render_template("namedEntity.html", header=header, ne_data=mergedDict, ne=namedEntity,
-                               subHeader="<p style='line-height: 32px;'>{}</p>".format(subHeader),
+                               subHeader="<p style='line-height: 32px;'>{}</p>".format(subHeader), colours=colours,
                                subText=subText, isFuzzy=isFuzzy, analytics=analytics, namesSet=shortNames, d3js=d3js, )
 
 
