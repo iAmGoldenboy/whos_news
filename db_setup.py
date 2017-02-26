@@ -37,9 +37,16 @@ PRIMARY KEY(`rss_id`, `avis`)
 NE's that are curated, have to be marked as such and receive less points
 */
 
+
 /* table for analytics to cut down on the processing - gets updated every ten minutes */
-CREATE TABLE IF NOT EXISTS NE_database.socialWatchlist (
+CREATE TABLE IF NOT EXISTS NE_database.socialWatchList (
 socWatch_id INT NOT NULL AUTO_INCREMENT,
+socWatch_art_it INT NOT NULL,
+socWatch_sm_count INT NOT NULL DEFAULT 0, /* the collective count */
+socWatch_growth INT NOT NULL DEFAULT 0, /* collective growth since last looked, starts at 0 */
+lastUpdate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+insertDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(`socWatch_id`)
 ) ENGINE=INNODB;
 
 

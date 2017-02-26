@@ -154,7 +154,24 @@ def extractImageText(imgtext, htmltag):
     return imagetext
 
 
+def bulkSocial(urlList):
+    """ <Response [401]> {"Error": "The Bulk API is not supported for users on the free plan."}
+    :param urlList:
+    :return:
+    """
+    api_key = dbconfig.apiKEY
+    endpoint = "https://free.sharedcount.com/bulk?apikey={}".format(api_key)
 
+    # create the query
+    rBuild = "POST free.sharedcount.com/bulk?apikey={} \n\n".format(api_key)
+    rBuild += "Request Body:\n"
+    for url in urlList:
+        rBuild += "{}{}".format(url, "\n")
+
+    # print(rBuild)
+
+    r = requests.post(endpoint, data=rBuild) #, stream=True)
+    print(r, r.text)
 
 def get_social_metrics(url, pause=3):
     """ Collect the Social Media Metrics from sharedcount.com.

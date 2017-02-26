@@ -28,7 +28,7 @@ class DBHelper:
         connection = self.connect()
 
         try:
-            query = """INSERT IGNORE INTO articleQue(articleLink, avis, sektion, seen )
+            query = """INSERT IGNORE INTO articleQue(articleLink,sektion, avis, seen )
             SELECT * FROM (SELECT '{}', '{}', '{}', {}) AS tmp
             WHERE NOT EXISTS (
                 SELECT articleLink FROM articleQue WHERE articleLink = '{}'
@@ -233,6 +233,25 @@ class DBHelper:
         finally:
             connection.close()
 
+    def insertArticleSocialWatchlist(self, article_id):
+
+        connection = self.connect()
+        try:
+            # query = """INSERT INTO articleSocialMediaCount (socialMedia_art_id, socialMediaID, socialMediaCount)
+            # VALUES ({}, '{}', {});""".format(article_id, enumValue, count)
+            query = """INSERT INTO socialWatchList (socialMedia_art_id, socialMediaID, socialMediaCount)
+            SELECT * FROM (SELECT {}, '{}', {}) AS tmp
+            WHERE NOT EXISTS (
+                SELECT socialMedia_art_id, socialMediaID, socialMediaCount FROM articleSocialMediaCount WHERE socialMedia_art_id = {} AND socialMediaID = '{}' AND socialMediaCount = {}
+            ) LIMIT 1;""".format(article_id)
+            # print("insertSocialMedia -> ", query)
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            connection.commit()
+        except Exception as e:
+            print("Error with {} / {} / {} : {} due to : {}".format(article_id))
+        finally:
+            connection.close()
 
     def insertValuesReturnID(self, tableName, tableFields, values, lookFor, item2look4, item_id='', mode="single", returnID=False, printQuery=False):
         """ Insert values to the database, and returns the row_id if returnID = True

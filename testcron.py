@@ -1,6 +1,4 @@
-__author__ = 'Miklas Njor - iAmGoldenboy - http://miklasnjor.com'
-__projectname__ = 'whos_news / testcron.py'
-__datum__ = '15/02/17'
+
 
 import schedule
 import time
@@ -15,7 +13,7 @@ from bs4 import BeautifulSoup
 
 DB = DBHelper()
 
-# print("you are piethon")
+print("you are piethon")
 
 
 def collectArticleLinks(rssFeedName, sektion, avis, olderArticles, newerArticles):
@@ -215,6 +213,7 @@ def extractArticleData():
                         # Lets first see what's in them
                         # print("Shebang", NEbag)
 
+                        # Redo signal at some point to be more accurate
                         keepAll = signal(NEbag)
                         keepHead = keepThoseAboveQuartile(NEhead)
                         keepTail = keepThoseAboveQuartile(NEtail)
@@ -251,6 +250,9 @@ def extractArticleData():
                             nerartValues = [neoutput, article_id, neData.get("sum"), headCount, tailCount, str(neData.get("shape"))]
 
                             ne2art_output = DB.insertValuesReturnID('namedEntity2Articles', ne2artFields, nerartValues, ['ne2art_ne_id', 'ne2art_art_id'], [neoutput, article_id], 'ne_id',  mode="ne2art", returnID=True, printQuery=False)
+
+                            # socialWatchlist article_id
+                            # DB.insertArticleSocialWatchlist(article_id)
 
                             # update each ne and get row id, add ne and row_id to dict
                             collectNEdict[neID] = {"ne_id" : neoutput,

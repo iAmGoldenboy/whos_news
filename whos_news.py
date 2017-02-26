@@ -112,6 +112,9 @@ def namedEntities(namedEntity=""):
             pass
         return redirect( "{}{}{}".format(url_for('namedEntities'), namedEnt, fuzz) )
 
+    elif namedEntity == "":
+        return render_template("base.html")
+
     else:
 
         fuzzy = ""
